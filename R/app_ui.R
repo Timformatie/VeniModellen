@@ -2,82 +2,81 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import bs4Dash
+#' @import bslib
 #' @import shiny
+#' @import shinyfullscreen
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # # Leave this function for adding external resources
     golem_add_external_resources(),
-    # # Your application UI logic
-    # fluidPage(
-    #   h1("BasisShinyDashboard")
-    # )
-    dashboardPage(
-      title = "BasisShinyDashboard",
-      # Disable full screen option
-      fullscreen = FALSE,
-      # Disable the toggle between the default light and dark themes of bs4Dash
-      dark = NULL,
-      # HEADER ----
-      header = bs4DashNavbar(
-        # Title of the dashboard displayed on top of sideBar
-        title = "<Header title>",
-        border = TRUE,
-        ## Left UI ----
-        leftUi = tagList(
-          tags$li(
-            class = "dropdown",
-            #auth0::logoutButton(class = "logout-button", label = "Uitloggen")
-          )
-        )#,
-        ## Right UI ----
-        # rightUi = tagList("Right UI")
-      ),
-      # SIDEBAR ----
-      sidebar = dashboardSidebar(
-        # Define using the "light" theme parameters defined above
-        skin = "light",
-        # No shadow over main body
-        elevation = 0,
-        minified = FALSE,
-        collapsed = FALSE,
-        fixed = FALSE,
-        id = "dashboard_sidebar",
-
-        ## User panel ----
-        sidebarUserPanel(
-          image = "",
-          name = "<User panel output>"
+    useShinyjs(),
+    page_fluid(
+      page_sidebar(
+        title = "Veni Modellen",
+        sidebar = sidebar(
+          title = "Model input",
+          p("Op dit moment worden de gegevens getoond voor patientnummer xxx"),
+          hr(style = "color: grey"),
+          p("Toon uitkomsten voor:"),
+          checkboxInput(inputId = "show_therapie",
+                        label = "Therapie",
+                        value = TRUE
+          ),
+          checkboxInput(inputId = "show_operatie",
+                        label = "Operatie",
+                        value = TRUE
+          ),
+          hr(style = "color: grey"),
+          selectizeInput(inputId = "age_in",
+                         label = "Age",
+                         choices = c(seq(18, 90, by = 1)),
+                         selected = NULL
+          ),
+          selectizeInput(inputId = "weight_in",
+                         label = "Weight",
+                         choices = c(seq(40, 200, by = 1)),
+                         selected = NULL
+          ),
+          selectizeInput(inputId = "duration_in",
+                         label = "Duur klachten (maanden)",
+                         choices = c(seq(1, 12, by = 1)),
+                         selected = NULL
+          ),
+          hr(style = "color: grey")
         ),
-
-        # Space between user panel and sidebar menu
-        br(), br(),
-
-        ## sidebar menu ----
-        "<Sidebar menu output>",
-
-        ## custom area ----
-        customArea = "<Logo>"
-      ),
-
-      ## FOOTER ----
-      footer = dashboardFooter(
-        left = "<Footer>",
-        right =  tags$a("Powered by timformatie.", href = "https://timformatie.nl/")
-      ),
-
-      ## BODY ----
-      body = dashboardBody(
-        box(
-          width = 12,
-          title = "Sankey plot",
-          highchartOutput("sankey_1"),
-          highchartOutput("sankey_2", height = 250, width = "59%")
+        layout_column_wrap(
+          width = 0.5,
+          card(
+            style = "background-color: rgb(233, 233, 233)",
+            card_body(
+              class = "slider-card align-items-center",
+              selectizeInput(inputId = "domain_in",
+                             label = "Kies een domein:",
+                             choices = c("Pijn", "Tintelingen", "Doofheid", "Kracht"),
+                             selected = "Pijn"
+                             ),
+              sliderInput("pmg_slider",
+                          "",
+                          min = 0,
+                          max = 10,
+                          value = c(3,10),
+                          width = 750,
+                          dragRange = FALSE
+                          ),
+              textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text")
+            )
+          )
+        ),
+        card(
+          card_header("Sankey plot"),
+          card_body(
+            fullscreen_this(highchartOutput("sankey_3")),
+            hr(id = "divider", style = "color: grey"),
+            fullscreen_this(highchartOutput("sankey_2", width = "59%", height = 200)),
+          )
         )
       )
-
-      # )
     )
   )
 }

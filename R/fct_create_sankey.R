@@ -18,17 +18,25 @@ create_sankey <- function(data) {
               name = "Basic Sankey Diagram",
               nodes = list(list(id = "doel behaald", color = "green"),
                            list(id = "doel niet behaald", color = "red"),
-                           list(id = "therapie", color = "lightgrey"),
-                           list(id = "operatie", color = "lightgrey"),
+                           list(id = "therapie", color = "dimgray"),
+                           list(id = "operatie", color = "dimgray"),
+                           list(id = "geen operatie", color = "dimgray"),
                            list(id = "doel behaald <br> na operatie", color = "green"),
-                           list(id = "doel niet behaald <br> na operatie", color = "red")
+                           list(id = "doel niet behaald <br> na operatie", color = "red"),
+                           list(id = "doel behaald ", color = "green"),
+                           list(id = "doel niet behaald ", color = "red")
               ),
-              nodeWidth = 170
-  ) %>%
-    hc_plotOptions(series = list(dataLabels = list(style =list(fontSize = "15px",
-                                                               color = "black"
-                                                               ),
-                                                   padding = 25))) %>%
+              colorByPoint = FALSE,
+              color = c("#cbd4e4"),
+              nodeWidth = 170,
+              nodePadding = 15,
+              linkColorMode = "gradient",
+              dataLabels = list(nodeFormat = "{point.name}",
+                                format = "{point.weight}%",
+                                style = list(fontSize = "15px",
+                                             color = "white"),
+                                padding = 25)
+              ) %>%
     hc_tooltip(pointFormat = "<b>Percentage</b> {point.weight}%")
 
   return(sankey_plot)

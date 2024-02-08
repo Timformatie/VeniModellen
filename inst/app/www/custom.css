@@ -1,62 +1,36 @@
-/* Header title
-Place your text or logo here.
-*/
-.brand-link {
-    background-color: rgba(85, 120, 115);
-    color: white !important;
-    font-family: Arial;
-    text-align: center;
-    letter-spacing: 0.2rem;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+.slider-card {
+  background-color: #4876b390;
 }
 
-/* Header (bar)
-It's possible to add shadow to this bar with box-shadow (commented for now).
-*/
-.main-header {
-    background-color: rgba(152, 174, 197);
-    color: rgba(77, 100, 106);
-    /*box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);*/
+.irs--shiny .irs-bar, .irs--shiny .irs-handle, .irs--shiny .irs-line,
+.irs--shiny .irs-min, .irs--shiny .irs-max, .irs.irs--shiny .irs-from, .irs.irs--shiny .irs-to {
+  background: white;
+  color: black;
 }
 
-.nav-link {
-  color: rgba(77, 100, 106) !important;
-}
-
-.logout-button {
-  background-color: rgba(85, 120, 115);
+.irs--shiny .irs-grid-text {
   color: white;
-  font-family: Arial;
+}
+
+.irs--shiny .irs-grid-pol {
+  background-color: white;
+}
+
+.MPG_text {
+  color: black;
   font-weight: bold;
-  letter-spacing: 0.1rem;
 }
 
-.sidebar {
-    background-color: white;
-    font-family: Arial;
-    text-align: center;
+.bslib-sidebar-layout>.sidebar {
+  background-color: #cbd4e4;
 }
 
-/* <Logo> */
-.sidebar-custom {
-  background-color: rgba(85, 120, 115);
+.container-fluid {
+  padding-left: 0px;
+}
+
+.bslib-page-title {
+  background-color: #4876b3;
   color: white;
-  font-family: Arial;
-  text-align: center;
-}
-
-/* Dashboard background
-You can use a background color and include a background image
-(make sure to place the image in the www folder).
-*/
-.content-wrapper {
-  background-color: #f4f6f9;
-  background-image: url('app_background.png');
-  background-repeat: no-repeat;
-  background-size: auto;
-  background-position: center;
-}
-
-.main-footer {
-  color: rgba(77, 100, 106);
+  letter-spacing: 0.2rem;
 }
