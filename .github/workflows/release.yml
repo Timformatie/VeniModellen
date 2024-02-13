@@ -12,7 +12,7 @@ env:
   ARTIFACT_REPO: veni-modellen
   IMAGE_NAME: veni-modellen-applicatie
   CONTAINER_PORT: 8080
-  SERVICE_ACCOUNT: basis-shiny-dashboard@timformatie.iam.gserviceaccount.com
+  SERVICE_ACCOUNT: veni-modellen@venimodellen.iam.gserviceaccount.com
 
 jobs:
   build_and_push:
