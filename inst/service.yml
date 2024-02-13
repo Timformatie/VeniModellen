@@ -1,0 +1,25 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: IMAGE_NAME_PLACEHOLDER
+  labels:
+    cloud.googleapis.com/location: REGION_PLACEHOLDER
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/client-name: cloud-console
+        autoscaling.knative.dev/maxScale: '100'
+        run.googleapis.com/sandbox: gvisor
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: SERVICE_ACCOUNT_PLACEHOLDER
+      containers:
+      - image: REGISTRY_PLACEHOLDER/GCP_PROJECT_PLACEHOLDER/ARTIFACT_REPO_PLACEHOLDER/IMAGE_NAME_PLACEHOLDER:latest
+        ports:
+        - containerPort: CONTAINER_PORT_PLACEHOLDER
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi

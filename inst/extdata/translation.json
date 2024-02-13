@@ -1,0 +1,19 @@
+{
+  "cultural_date_format": "%d-%m-%Y",
+  "languages": ["nl", "en"],
+  "translation": [
+    {"en": "Current data shown is for patient number xxx", "nl": "Op dit moment worden de gegevens getoond voor patientnummer xxx"},
+    {"en": "Show results for:", "nl": "Toon uitkomsten voor:"},
+    {"en": "Age", "nl": "Leeftijd"},
+    {"en": "Weight", "nl": "Gewicht"},
+    {"en": "Symptom duration (months)", "nl": "Duur klachten (maanden)"},
+    {"en": "doel behaald", "nl": "goal achieved"},
+    {"en": "Nonsurgical Treatment", "nl": "Therapie"},
+    {"en": "Surgical Treatment", "nl": "Operatie"},
+    {"en": "Pain", "nl": "Pijn"},
+    {"en": "Strength", "nl": "Kracht"},
+    {"en": "Deafness", "nl": "Doofheid"},
+    {"en": "Tingling", "nl": "Tintelingen"},
+    {"en": "Choose a domain:", "nl": "Kies een domein:"}
+  ]
+}
