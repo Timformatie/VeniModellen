@@ -23,6 +23,6 @@ run_app <- function(
       enableBookmarking = enableBookmarking,
       uiPattern = uiPattern
     ),
-    golem_opts = list(...)
+    golem_opts = list(translator = Translator$new(translation_json_path = app_sys("extdata/translation.json")))
   )
 }

@@ -10,21 +10,22 @@
 #'
 #' @import highcharter
 #' @import dplyr
-create_sankey <- function(data) {
+create_sankey <- function(data, lang) {
+
+  from_values <- if (lang == "nl") from_therapie_nl else from_therapie_en
+  to_values <- if (lang == "nl") to_therapie_nl else to_therapie_en
 
   sankey_plot <- hchart(data,
               type = "sankey",
               hcaes(from = from, to = to, weight = weight),
               name = "Basic Sankey Diagram",
-              nodes = list(list(id = "doel behaald", color = "green"),
-                           list(id = "doel niet behaald", color = "red"),
-                           list(id = "therapie", color = "dimgray"),
-                           list(id = "operatie", color = "dimgray"),
-                           list(id = "geen operatie", color = "dimgray"),
-                           list(id = "doel behaald <br> na operatie", color = "green"),
-                           list(id = "doel niet behaald <br> na operatie", color = "red"),
-                           list(id = "doel behaald ", color = "green"),
-                           list(id = "doel niet behaald ", color = "red")
+              nodes = list(list(id = to_values[1], color = "green"),
+                           list(id = to_values[2], color = "red"),
+                           list(id = from_values[1], color = "dimgray"),
+                           list(id = to_values[3], color = "dimgray"),
+                           list(id = to_values[4], color = "dimgray"),
+                           list(id = to_values[5], color = "green"),
+                           list(id = to_values[6], color = "red")
               ),
               colorByPoint = FALSE,
               color = c("#cbd4e4"),

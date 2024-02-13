@@ -6,6 +6,29 @@
 .irs--shiny .irs-min, .irs--shiny .irs-max, .irs.irs--shiny .irs-from, .irs.irs--shiny .irs-to {
   background: white;
   color: black;
+  font-size: 16px;
+}
+
+.irs-grid-text {
+    font-size: 16px;
+}
+
+.irs--shiny .irs-bar::before {
+  height: 0px;
+}
+
+.irs.irs--shiny .irs-bar {
+  background-color: black!important;
+}
+
+.rood {
+  background: red!important;
+  color: white!important;
+}
+
+.groen {
+  background: green!important;
+  color: white!important;
 }
 
 .irs--shiny .irs-grid-text {

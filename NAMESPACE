@@ -2,9 +2,11 @@
 
 export(run_app)
 import(bslib)
+import(data.table)
 import(dplyr)
 import(highcharter)
 import(shiny)
+import(shiny.i18n)
 import(shinyfullscreen)
 import(shinyjs)
 import(stringr)

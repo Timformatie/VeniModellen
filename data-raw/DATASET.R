@@ -13,8 +13,20 @@ dt_sankey_2 <- links <- data.frame(
 )
 
 dt_sankey_3 <- links <- data.frame(
-  from=c("therapie","therapie", "doel niet behaald", "doel niet behaald", "operatie", "operatie"),
-  to=c("doel behaald","doel niet behaald", "operatie", "geen operatie", "doel behaald ", "doel niet behaald "),
+  from=c("therapie",
+         "therapie",
+         "doel niet behaald",
+         "doel niet behaald",
+         "operatie",
+         "operatie"
+         ),
+  to=c("doel behaald",
+       "doel niet behaald",
+       "operatie",
+       "geen operatie",
+       "doel behaald ",
+       "doel niet behaald "
+       ),
   weight=c(75, 25, 30, 70, 85, 15)
 )
 
@@ -39,10 +51,28 @@ dt_sankey_5 <- links <- data.frame(
 model <- get(load("rfe_result_gbm_20231102.RData"))
 dt_train <- model$fit$trainingData
 
+from_therapie_nl <- c("therapie","therapie", "doel niet behaald", "doel niet behaald", "operatie", "operatie")
+to_therapie_nl <- c("doel behaald","doel niet behaald", "operatie", "geen operatie", "doel behaald ", "doel niet behaald ")
+from_therapie_en <- c("nonsurgical <br> treatment","nonsurgical <br> treatment", "nonsuccesful <br> nonsurgical treatment", "nonsuccesful <br> nonsurgical treatment", "surgical treatment", "surgical treatment")
+to_therapie_en <- c("succesful <br> nonsurgical treatment","nonsuccesful <br> nonsurgical treatment", "surgical treatment", "no surgical treatment", "succesful <br> surgical treatment", "nonsuccesful <br> surgical treatment")
+
+from_operatie_nl <- c("operatie", "operatie")
+to_operatie_nl <- c("doel behaald","doel niet behaald")
+from_operatie_en <- c("surgical treatment","surgical treatment")
+to_operatie_en <- c("succesful <br> surgical treatment","nonsuccesful <br> surgical treatment")
+
 usethis::use_data(dt_sankey_1,
                   dt_sankey_2,
                   dt_sankey_3,
                   dt_sankey_4,
                   dt_sankey_5,
                   dt_train,
+                  from_therapie_nl,
+                  from_therapie_en,
+                  to_therapie_nl,
+                  to_therapie_en,
+                  from_operatie_nl,
+                  to_operatie_nl,
+                  from_operatie_en,
+                  to_operatie_en,
                   overwrite = TRUE)
