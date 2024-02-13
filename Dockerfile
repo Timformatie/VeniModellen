@@ -1,8 +1,18 @@
 FROM rocker/shiny-verse:4.3.1
 
+# set environment variables
+ENV SHINY_LOG_STDERR=1
+
 # install system dependencies
 RUN apt-get update -y && apt-get install -y \
-  git
+  git \
+  make \
+  pandoc \
+  libssl-dev \
+  libcurl4-openssl-dev \
+  libicu-dev \
+  zlib1g-dev \
+  libglpk-dev
 
 WORKDIR /srv/shiny-server/
 
