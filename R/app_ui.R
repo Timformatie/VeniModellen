@@ -91,9 +91,7 @@ app_ui <- function(request) {
           card_body(
             fullscreen_this(highchartOutput("sankey_3")),
             hr(id = "divider", style = "color: grey"),
-            fullscreen_this(highchartOutput("sankey_2", width = "59%")),
-            hr(id = "divider", style = "color: grey"),
-            fullscreen_this(highchartOutput("sankey_100", width = "59%")),
+            fullscreen_this(highchartOutput("sankey_2", width = "59%"))
           )
         )
       )
