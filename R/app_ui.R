@@ -78,7 +78,7 @@ app_ui <- function(request) {
                           "",
                           min = 0,
                           max = 10,
-                          value = c(3,10),
+                          value = c(0,10),
                           width = 750,
                           dragRange = FALSE
                           ),
@@ -89,9 +89,9 @@ app_ui <- function(request) {
         card(
           card_header("Sankey plot"),
           card_body(
-            fullscreen_this(highchartOutput("sankey_3")),
+            fullscreen_this(highchartOutput("sankey_therapie")),
             hr(id = "divider", style = "color: grey"),
-            fullscreen_this(highchartOutput("sankey_2", width = "59%"))
+            fullscreen_this(highchartOutput("sankey_operatie", width = "59%"))
           )
         )
       )
