@@ -24,7 +24,15 @@ create_sankey <- function(data, language) {
     from == "operatie" & to == "doel <br> behaald " ~ paste0(weight, "% van de mensen die na therapie een operatie hebben gekregen, heeft daarna hun doel behaald."),
     from == "operatie" & to == "doel niet <br> behaald " ~ paste0(weight, "% van de mensen die na therapie een operatie hebben gekregen, heeft daarna hun doel niet behaald."),
     from == "operatie" & to == "doel <br> behaald" ~ paste0(weight, "% van de mensen die een operatie hebben gekregen, heeft daarna hun doel behaald."),
-    from == "operatie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die een operatie hebben gekregen, heeft daarna hun doel niet behaald.")
+    from == "operatie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die een operatie hebben gekregen, heeft daarna hun doel niet behaald."),
+    from == "nonsurgical <br> treatment" & to == "goal <br> obtained" ~ paste0(weight, "% of people who have received nonsurgical treatment, has obtained their goal."),
+    from == "nonsurgical <br> treatment" & to == "goal not <br> obtained" ~ paste0(weight, "% of people who have received nonsurgical treatment, did not obtain their goal."),
+    from == "goal not <br> obtained" & to == "surgical <br> treatment" ~ paste0(weight, "% of people who did not obtain their goal, subsequently choose surgery."),
+    from == "goal not <br> obtained" & to == "no surgical <br> treatment" ~ paste0(weight, "% of people who did not obtain their goal, subsequently choose surgery."),
+    from == "surgical <br> treatment" & to == "goal <br> obtained " ~ paste0(weight, "% of people who received surgery after nonsurgical treatment, has obtained their goal."),
+    from == "surgical <br> treatment" & to == "goal not <br> obtained " ~ paste0(weight, "% people who received surgery after nonsurgical treatment, did not obtain their goal."),
+    from == "surgical <br> treatment" & to == "goal <br> obtained" ~ paste0(weight, "% of people who have received surgical treatment, has obtained their goal."),
+    from == "surgical <br> treatment" & to == "goal not <br> obtained" ~ paste0(weight, "% of people who have received surgical treatment, did not obtain their goal.")
   )]
 
   sankey_plot <- hchart(data,
@@ -52,7 +60,7 @@ create_sankey <- function(data, language) {
               ) %>%
     hc_tooltip(headerFormat = "",
                pointFormat = paste0('<span style = "color: white; font-size: 16px">', "{point.sentence}", '</span>'),
-               backgroundColor = "#4876b390",
+               backgroundColor = "#4876b3",
                borderColor = "black")
 
 #{point.fromNode.name} → {point.toNode.name}: <b>{point.weight}%</b><br/>
