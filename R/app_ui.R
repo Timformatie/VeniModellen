@@ -6,6 +6,7 @@
 #' @import shiny
 #' @import shinyfullscreen
 #' @import shiny.i18n
+#' @import waiter
 #' @noRd
 app_ui <- function(request) {
   i18n <- golem::get_golem_options(which = "translator")
@@ -16,6 +17,8 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     useShinyjs(),
     usei18n(i18n),
+    useWaiter(),
+    waiterShowOnLoad(html = spin_three_bounce(), color = "#4876b3"),   # show loading screen while app is getting ready
     page_fluid(
       page_sidebar(
         title = "Veni Modellen",

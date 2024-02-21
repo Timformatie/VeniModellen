@@ -7,6 +7,7 @@
 #' @import shinyjs
 #' @import shiny.i18n
 #' @import data.table
+#' @import waiter
 #' @noRd
 app_server <- function(input, output, session) {
 
@@ -38,6 +39,7 @@ app_server <- function(input, output, session) {
                                             current_strength = NULL,
                                             goal_strength = NULL
                                             ))
+
 
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
@@ -153,6 +155,7 @@ app_server <- function(input, output, session) {
       shinyjs::hide(id = "happy-smiley-right")
       shinyjs::show(id = "sad-smiley-right")
     }
+
   }, ignoreInit = TRUE)
 
   # Change text according to domain and slider values
@@ -248,5 +251,7 @@ app_server <- function(input, output, session) {
       shinyjs::hide("divider")
     }
   })
+
+  waiter_hide()
 
 }
