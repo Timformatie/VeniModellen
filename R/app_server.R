@@ -76,10 +76,10 @@ app_server <- function(input, output, session) {
 
     updateSelectizeInput(session = session,
                          inputId = "domain_in",
-                         choices = setNames(c("Pijn", "Tintelingen", "Doofheid", "Kracht"),
+                         choices = setNames(c("pijn", "tintelingen", "doofheid", "kracht"),
                                             c(i18n()$t("Pijn"),i18n()$t("Tintelingen"),i18n()$t("Doofheid"),i18n()$t("Kracht")))
     )
-  }, priority = 1)
+  })
 
   # Update slider input ----
   # Set slider values when domain input changes
@@ -87,7 +87,7 @@ app_server <- function(input, output, session) {
     req(!input$domain_in == "")
 
     # Update selected domain reactiveVal
-    selected_domain(tolower(input$domain_in))
+    selected_domain(input$domain_in)
 
     # Get current and goal values for selected domain and update slider
     current_val <- v$dt_input[[paste0("current_", selected_domain())]]
@@ -138,12 +138,20 @@ app_server <- function(input, output, session) {
     # CSS classes are added here instead of in observeEvent(input$domain_in),
     # because it seemed like shiny overwrote the added classes when updating
     # the slider with updateSliderInput.
-    if (input$domain_in %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
+    if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
       addClass(selector = ".irs--shiny .irs-min", class = "rood")
       addClass(selector = ".irs--shiny .irs-max", class = "groen")
+      shinyjs::hide(id = "happy-smiley-left")
+      shinyjs::show(id = "sad-smiley-left")
+      shinyjs::show(id = "happy-smiley-right")
+      shinyjs::hide(id = "sad-smiley-right")
     } else {
       addClass(selector = ".irs--shiny .irs-min", class = "groen")
       addClass(selector = ".irs--shiny .irs-max", class = "rood")
+      shinyjs::show(id = "happy-smiley-left")
+      shinyjs::hide(id = "sad-smiley-left")
+      shinyjs::hide(id = "happy-smiley-right")
+      shinyjs::show(id = "sad-smiley-right")
     }
   }, ignoreInit = TRUE)
 
@@ -174,7 +182,7 @@ app_server <- function(input, output, session) {
     pred_therapie <- predict(model, dt_train[random_row,])
     pred_therapie_operatie <- predict(model, dt_train[random_row + 1,])
 
-    dt_pred <- rbind(pred_therapie, pred_therapie_operatie)
+    dt_pred <- data.table(rbind(pred_therapie, pred_therapie_operatie))
 
     return(dt_pred)
   })
@@ -182,7 +190,7 @@ app_server <- function(input, output, session) {
   ## data for plot ----
   dt_results_therapie_operatie <- reactive({
     dt_pred <- dt_pred_therapie_operatie()
-    dt_sankey_therapie <- create_plot_dataframe(dt_pred, input$language_in, "therapie")
+    dt_sankey_therapie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in, treatment_type = "therapie")
     return(dt_sankey_therapie)
   })
 
@@ -197,7 +205,7 @@ app_server <- function(input, output, session) {
     # Predict new probabilities (for now demo probs are calculated)
     ##pred_operatie <- predict(model_naam, dt_input) --> this will be the correct code in the future
     random_row <- round(runif(1, min = 1, max = nrow(dt_train)))
-    pred_operatie <- predict(model, dt_train[random_row,])
+    pred_operatie <- data.table(predict(model, dt_train[random_row,]))
 
     return(pred_operatie)
   })
@@ -205,7 +213,8 @@ app_server <- function(input, output, session) {
   ## data for plot ----
   dt_results_operatie <- reactive({
     dt_pred <- dt_pred_operatie()
-    dt_results_operatie <- create_plot_dataframe(dt_pred, input$language_in, "operatie")
+    dt_results_operatie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in, treatment_type = "operatie")
+
     return(dt_results_operatie)
   })
 

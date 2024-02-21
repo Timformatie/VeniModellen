@@ -74,14 +74,28 @@ app_ui <- function(request) {
                              label = i18n$t("Kies een domein:"),
                              choices = NULL
                              ),
-              sliderInput("pmg_slider",
-                          "",
-                          min = 0,
-                          max = 10,
-                          value = c(0,10),
-                          width = 750,
-                          dragRange = FALSE
-                          ),
+              layout_column_wrap(
+                width = NULL,
+                style = htmltools::css(grid_template_columns = "1fr 8fr 1fr", align.items = "center"),
+                div(
+                  class = "smiley-left",
+                  img(id = "happy-smiley-left", src = "www/happy-smiley.webp", height = 25, width = 25),
+                  img(id = "sad-smiley-left", src = "www/sad-smiley.png", height = 25, width = 25)
+                ),
+                sliderInput("pmg_slider",
+                            "",
+                            min = 0,
+                            max = 10,
+                            value = c(0,10),
+                            width = 750,
+                            dragRange = FALSE
+                ),
+                div(
+                  class = "smiley-right",
+                  img(id = "sad-smiley-right", src = "www/sad-smiley.png", height = 25, width = 25),
+                  img(id = "happy-smiley-right", src = "www/happy-smiley.webp", height = 25, width = 25, class = "hide")
+                )
+              ),
               textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text")
             )
           )
