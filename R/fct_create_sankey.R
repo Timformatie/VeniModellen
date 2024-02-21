@@ -53,8 +53,8 @@ create_sankey <- function(data, language) {
               nodePadding = 15,
               linkColorMode = "gradient",
               dataLabels = list(nodeFormat = "{point.name}",
-                                format = "{point.weight}%",
-                                style = list(fontSize = "15px",
+                                format = paste0('<span style = "letter-spacing: 0.15rem">', "{point.weight}%", '</span>'),
+                                style = list(fontSize = "18px",
                                              color = "white"),
                                 padding = 25)
               ) %>%
