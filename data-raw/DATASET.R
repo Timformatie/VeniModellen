@@ -51,15 +51,15 @@ dt_sankey_5 <- links <- data.frame(
 model <- get(load("rfe_result_gbm_20231102.RData"))
 dt_train <- model$fit$trainingData
 
-from_therapie_nl <- c("therapie","therapie", "doel niet behaald", "doel niet behaald", "operatie", "operatie")
-to_therapie_nl <- c("doel behaald","doel niet behaald", "operatie", "geen operatie", "doel behaald ", "doel niet behaald ")
-from_therapie_en <- c("nonsurgical <br> treatment","nonsurgical <br> treatment", "nonsuccesful <br> nonsurgical treatment", "nonsuccesful <br> nonsurgical treatment", "surgical treatment", "surgical treatment")
-to_therapie_en <- c("succesful <br> nonsurgical treatment","nonsuccesful <br> nonsurgical treatment", "surgical treatment", "no surgical treatment", "succesful <br> surgical treatment", "nonsuccesful <br> surgical treatment")
+from_therapie_nl <- c("therapie","therapie", "doel niet <br> behaald", "doel niet <br> behaald", "operatie", "operatie")
+to_therapie_nl <- c("doel <br> behaald","doel niet <br> behaald", "operatie", "geen <br> operatie", "doel <br> behaald ", "doel niet <br> behaald ")
+from_therapie_en <- c("nonsurgical <br> treatment","nonsurgical <br> treatment", "goal not <br> obtained", "goal not <br> obtained", "surgical <br> treatment", "surgical <br> treatment")
+to_therapie_en <- c("goal <br> obtained","goal not <br> obtained", "surgical <br> treatment", "no surgical <br> treatment", "goal <br> obtained ", "goal not <br> obtained ")
 
 from_operatie_nl <- c("operatie", "operatie")
-to_operatie_nl <- c("doel behaald","doel niet behaald")
-from_operatie_en <- c("surgical treatment","surgical treatment")
-to_operatie_en <- c("succesful <br> surgical treatment","nonsuccesful <br> surgical treatment")
+to_operatie_nl <- c("doel <br> behaald","doel niet <br> behaald")
+from_operatie_en <- c("surgical <br> treatment","surgical <br> treatment")
+to_operatie_en <- c("goal <br> obtained","goal not <br> obtained")
 
 reverse_domains <- c("kracht")
 
