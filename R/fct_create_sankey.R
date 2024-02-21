@@ -2,7 +2,8 @@
 #'
 #' @description This function creates a Sankey plot.
 #'
-#' @param data the data needed to create the Sankey plot.
+#' @param data the dataframe needed to create the Sankey plot
+#' @param language language selected by user
 #'
 #' @return A Sankey plot.
 #'
@@ -10,10 +11,10 @@
 #'
 #' @import highcharter
 #' @import dplyr
-create_sankey <- function(data, lang) {
+create_sankey <- function(data, language) {
 
-  from_values <- if (lang == "nl") from_therapie_nl else from_therapie_en
-  to_values <- if (lang == "nl") to_therapie_nl else to_therapie_en
+  from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
+  to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
 
   sankey_plot <- hchart(data,
               type = "sankey",

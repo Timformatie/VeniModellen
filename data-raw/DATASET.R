@@ -61,6 +61,8 @@ to_operatie_nl <- c("doel behaald","doel niet behaald")
 from_operatie_en <- c("surgical treatment","surgical treatment")
 to_operatie_en <- c("succesful <br> surgical treatment","nonsuccesful <br> surgical treatment")
 
+reverse_domains <- c("kracht")
+
 usethis::use_data(dt_sankey_1,
                   dt_sankey_2,
                   dt_sankey_3,
@@ -75,4 +77,6 @@ usethis::use_data(dt_sankey_1,
                   to_operatie_nl,
                   from_operatie_en,
                   to_operatie_en,
+                  model,
+                  reverse_domains,
                   overwrite = TRUE)
