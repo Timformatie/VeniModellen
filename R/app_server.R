@@ -82,7 +82,6 @@ app_server <- function(input, output, session) {
                                             c(i18n()$t("Pijn"),i18n()$t("Tintelingen"),i18n()$t("Doofheid"),i18n()$t("Kracht")))
     )
 
-    waiter_hide()
   })
 
   # Update slider input ----
@@ -102,6 +101,8 @@ app_server <- function(input, output, session) {
                       inputId = "pmg_slider",
                       value = range_vector
     )
+
+    waiter_hide()
 
   })
 
