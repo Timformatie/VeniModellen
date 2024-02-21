@@ -22,12 +22,12 @@
 }
 
 .rood {
-  background: red!important;
+  background: rgb(210, 67, 66)!important;
   color: white!important;
 }
 
 .groen {
-  background: green!important;
+  background: rgb(105, 172, 60)!important;
   color: white!important;
 }
 
@@ -57,3 +57,17 @@
   color: white;
   letter-spacing: 0.2rem;
 }
+
+.smiley-left {
+  text-align: end;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: inline;
+}
+
+
