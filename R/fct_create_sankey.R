@@ -16,6 +16,7 @@ create_sankey <- function(data, language) {
   from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
   to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
 
+  # Add text that is shown when hovered over link
   data = data[, sentence := case_when(
     from == "therapie" & to == "doel <br> behaald" ~ paste0(weight, "% van de mensen die therapie hebben gekregen, heeft daarna hun doel behaald."),
     from == "therapie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die therapie hebben gekregen, heeft daarna hun doel niet behaald."),
@@ -39,31 +40,31 @@ create_sankey <- function(data, language) {
               type = "sankey",
               hcaes(from = from, to = to, weight = weight),
               name = "Basic Sankey Diagram",
-              nodes = list(list(id = to_values[1], color = "green"),
-                           list(id = to_values[2], color = "red"),
-                           list(id = from_values[1], color = "dimgray"),
-                           list(id = to_values[3], color = "dimgray"),
-                           list(id = to_values[4], color = "dimgray"),
-                           list(id = to_values[5], color = "green"),
-                           list(id = to_values[6], color = "red")
+              nodes = list(list(id = from_values[1], color = color_list$grey),
+                           list(id = to_values[1], color = color_list$green),
+                           list(id = to_values[2], color = color_list$red),
+                           list(id = to_values[3], color = color_list$grey),
+                           list(id = to_values[4], color = color_list$grey),
+                           list(id = to_values[5], color = color_list$green),
+                           list(id = to_values[6], color = color_list$red)
               ),
               colorByPoint = FALSE,
               color = c("#cbd4e4"),
               nodeWidth = 120,
-              nodePadding = 15,
+              nodePadding = 50,
               linkColorMode = "gradient",
               dataLabels = list(nodeFormat = "{point.name}",
-                                format = paste0('<span style = "letter-spacing: 0.15rem">', "{point.weight}%", '</span>'),
+                                format = paste0('<span style = "letter-spacing: 0.15rem">', "{point.label}%", '</span>'),
                                 style = list(fontSize = "18px",
-                                             color = "white"),
-                                padding = 25)
+                                             color = "black"),
+                                padding = 25,
+                                allowOverlap = TRUE)
               ) %>%
     hc_tooltip(headerFormat = "",
                pointFormat = paste0('<span style = "color: white; font-size: 16px">', "{point.sentence}", '</span>'),
                backgroundColor = "#4876b3",
                borderColor = "black")
 
-#{point.fromNode.name} → {point.toNode.name}: <b>{point.weight}%</b><br/>
 
   return(sankey_plot)
 

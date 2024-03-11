@@ -26,8 +26,24 @@ create_plot_datatable <- function(dt_pred, language, treatment_type) {
   dt_results <- data.table(
     from = from_values,
     to = to_values,
-    weight = weight_values
+    weight = weight_values,
+    label = weight_values
   )
+
+  if (nrow(dt_results)>2) {
+    dt_results = dt_results[1:2, weight := label]
+
+    from_node_value <- dt_results[3, from]
+    from_node_weight_1 <- dt_results[to == from_node_value, label]
+    dt_results[3:4, weight := as.numeric(from_node_weight_1)/100*as.numeric(label)]
+
+    from_node_value <- dt_results[5, from]
+    from_node_weight_2 <- dt_results[to == from_node_value, label]
+    dt_results[5:6, weight := as.numeric(from_node_weight_1)/100*as.numeric(from_node_weight_2)/100*as.numeric(label)]
+
+  }
+
+  #browser()
 
   return(dt_results)
 }

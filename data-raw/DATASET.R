@@ -12,29 +12,30 @@ dt_sankey_2 <- links <- data.frame(
   weight=c(80, 20)
 )
 
-dt_sankey_3 <- links <- data.frame(
-  from=c("therapie",
-         "therapie",
-         "doel niet behaald",
-         "doel niet behaald",
-         "operatie",
-         "operatie"
-         ),
-  to=c("doel behaald",
-       "doel niet behaald",
-       "operatie",
-       "geen operatie",
-       "doel behaald ",
-       "doel niet behaald "
-       ),
-  weight=c(75, 25, 30, 70, 85, 15)
-)
-
 # dt_sankey_3 <- links <- data.frame(
-#   from=c("therapie","therapie", "doel niet behaald", "doel niet behaald", "operatie", "operatie"),
-#   to=c("doel behaald","doel niet behaald", "operatie", "geen operatie", "doel behaald ", "doel niet behaald "),
-#   weight=c(75, 25, 30*0.25, 70*0.25, 85*0.3*0.25, 15*0.3*0.25)
+#   from=c("therapie",
+#          "therapie",
+#          "doel niet behaald",
+#          "doel niet behaald",
+#          "operatie",
+#          "operatie"
+#          ),
+#   to=c("doel behaald",
+#        "doel niet behaald",
+#        "operatie",
+#        "geen operatie",
+#        "doel behaald ",
+#        "doel niet behaald "
+#        ),
+#   weight=c(75, 25, 30, 70, 85, 15)
 # )
+
+dt_sankey_3 <- links <- data.frame(
+  from=c("therapie","therapie", "doel niet <br> behaald", "doel niet <br> behaald", "operatie", "operatie"),
+  to=c("doel <br> behaald","doel niet <br> behaald", "operatie", "geen <br> operatie", "doel <br> behaald ", "doel niet <br> behaald "),
+  weight=c(75, 25, 30*0.25, 70*0.25, 85*0.3*0.25, 15*0.3*0.25),
+  label=c(75, 25, 30, 70, 85, 15)
+)
 
 dt_sankey_4 <- links <- data.frame(
   from=c("therapie","therapie", "doel niet behaald", "doel niet behaald"),

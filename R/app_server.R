@@ -146,6 +146,7 @@ app_server <- function(input, output, session) {
     if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
       addClass(selector = ".irs--shiny .irs-min", class = "rood")
       addClass(selector = ".irs--shiny .irs-max", class = "groen")
+      addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
       shinyjs::hide(id = "happy-smiley-left")
       shinyjs::show(id = "sad-smiley-left")
       shinyjs::show(id = "happy-smiley-right")
@@ -153,6 +154,7 @@ app_server <- function(input, output, session) {
     } else {
       addClass(selector = ".irs--shiny .irs-min", class = "groen")
       addClass(selector = ".irs--shiny .irs-max", class = "rood")
+      addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
       shinyjs::show(id = "happy-smiley-left")
       shinyjs::hide(id = "sad-smiley-left")
       shinyjs::hide(id = "happy-smiley-right")
@@ -227,6 +229,7 @@ app_server <- function(input, output, session) {
   # Create sankey plots ----
   output$sankey_therapie <- renderHighchart({
     plot <- create_sankey(dt_results_therapie_operatie(), language = input$language_in)
+    #plot <- create_sankey(data.table(dt_sankey_3), language = input$language_in)
     return(plot)
   })
 
