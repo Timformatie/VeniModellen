@@ -46,16 +46,16 @@ app_ui <- function(request) {
                          choices = NULL,
                          selected = NULL
           ),
-          # selectizeInput(inputId = "track_in",
-          #                label = i18n$t("Meettraject"),
-          #                choices = c(seq(1, 12, by = 1)),
-          #                selected = NULL
-          # ),
-          # selectizeInput(inputId = "track_type_in",
-          #                label = i18n$t("Meettraject type"),
-          #                choices = c(seq(1, 12, by = 1)),
-          #                selected = NULL
-          # ),
+          selectizeInput(inputId = "track_in",
+                         label = i18n$t("Meettraject"),
+                         choices = c(seq(1, 12, by = 1)),
+                         selected = NULL
+          ),
+          selectizeInput(inputId = "track_type_in",
+                         label = i18n$t("Meettraject type"),
+                         choices = c(seq(1, 12, by = 1)),
+                         selected = NULL
+          ),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
                          choices = c(seq(16, 90, by = 1)),

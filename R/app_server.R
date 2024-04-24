@@ -23,6 +23,11 @@ app_server <- function(input, output, session) {
     update_lang(session = session, language = input$language_in)
   })
 
+  observe({
+    disable("track_in")
+    disable("track_type_in")
+  })
+
   # Initialiseer reactiveVal's
   selected_domain <- reactiveVal()
 
@@ -310,6 +315,17 @@ app_server <- function(input, output, session) {
     v$dt_input[["Diagnose"]] <- input$diagnose_in
     v$dt_input[["Track"]] <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Track]
     v$dt_input[["Track_type"]] <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, `Track Type`]
+
+    updateSelectizeInput(session = session,
+                         inputId = "track_in",
+                         selected = isolate(v$dt_input$Track)
+    )
+
+    updateSelectizeInput(session = session,
+                         inputId = "track_type_in",
+                         selected = isolate(v$dt_input$Track_type)
+    )
+
   })
 
   observeEvent(input$ipqemotionalresponse_SQ001_in, {
