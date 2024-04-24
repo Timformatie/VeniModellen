@@ -11,16 +11,21 @@
 #' @importFrom data.table data.table
 #'
 #' @noRd
-create_plot_datatable <- function(dt_pred, language, treatment_type) {
+create_plot_datatable <- function(dt_pred, language, treatment_type, PMG) {
 
+  # Determine probabilities patient will continue with surgery
+  X_continue_surgery <- round(dt_continue_surgery[variable == PMG, X] * 100)
+  X_no_surgery <- round((100 - X_continue_surgery))
+
+  # Create datatables with probabilities
   if (treatment_type == "therapie") {
     from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
     to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
-    weight_values <- c(round(dt_pred[1,3]*100), round(dt_pred[1,2]*100), 30, 70, round(dt_pred[2,3]*100), round(dt_pred[2,2]*100))
+    weight_values <- c(round(dt_pred[1,Yes]*100), round(dt_pred[1,No]*100), X_continue_surgery, X_no_surgery, round(dt_pred[2,Yes]*100), round(dt_pred[2,No]*100))
   } else {
     from_values <- if (language == "nl") from_operatie_nl else from_operatie_en
     to_values <- if (language == "nl") to_operatie_nl else to_operatie_en
-    weight_values <- c(round(dt_pred[1,3]*100), round(dt_pred[1,2]*100))
+    weight_values <- c(round(dt_pred[1,Yes]*100), round(dt_pred[1,No]*100))
   }
 
   dt_results <- data.table(
@@ -30,6 +35,7 @@ create_plot_datatable <- function(dt_pred, language, treatment_type) {
     label = weight_values
   )
 
+  # Alter weights to show sankey plot correctly
   if (nrow(dt_results)>2) {
     dt_results = dt_results[1:2, weight := label]
 
@@ -42,8 +48,6 @@ create_plot_datatable <- function(dt_pred, language, treatment_type) {
     dt_results[5:6, weight := as.numeric(from_node_weight_1)/100*as.numeric(from_node_weight_2)/100*as.numeric(label)]
 
   }
-
-  #browser()
 
   return(dt_results)
 }

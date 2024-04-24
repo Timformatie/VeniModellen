@@ -49,8 +49,8 @@ dt_sankey_5 <- links <- data.frame(
   weight=c(60, 40)
 )
 
-model <- get(load("rfe_result_gbm_20231102.RData"))
-dt_train <- model$fit$trainingData
+dt_train <- data.table::data.table(model$trainingData)
+dt_train = dt_train[, ".outcome" := NULL]
 
 from_therapie_nl <- c("therapie","therapie", "doel niet <br> behaald", "doel niet <br> behaald", "operatie", "operatie")
 to_therapie_nl <- c("doel <br> behaald","doel niet <br> behaald", "operatie", "geen <br> operatie", "doel <br> behaald ", "doel niet <br> behaald ")
@@ -62,7 +62,6 @@ to_operatie_nl <- c("doel <br> behaald","doel niet <br> behaald")
 from_operatie_en <- c("surgical <br> treatment","surgical <br> treatment")
 to_operatie_en <- c("goal <br> obtained","goal not <br> obtained")
 
-reverse_domains <- c("kracht")
 
 usethis::use_data(dt_sankey_1,
                   dt_sankey_2,

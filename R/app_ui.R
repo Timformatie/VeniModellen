@@ -23,6 +23,7 @@ app_ui <- function(request) {
       page_sidebar(
         title = "Veni Modellen",
         sidebar = sidebar(
+          width = 300,
           title = "Model input",
           p(i18n$t("Op dit moment worden de gegevens getoond voor patientnummer xxx")),
           hr(style = "color: grey"),
@@ -31,14 +32,33 @@ app_ui <- function(request) {
                         label = i18n$t("Therapie"),
                         value = TRUE
           ),
+          checkboxInput(inputId = "show_injectie",
+                        label = i18n$t("Injectie"),
+                        value = TRUE
+          ),
           checkboxInput(inputId = "show_operatie",
                         label = i18n$t("Operatie"),
                         value = TRUE
           ),
           hr(style = "color: grey"),
+          selectizeInput(inputId = "diagnose_in",
+                         label = i18n$t("Diagnose"),
+                         choices = NULL,
+                         selected = NULL
+          ),
+          # selectizeInput(inputId = "track_in",
+          #                label = i18n$t("Meettraject"),
+          #                choices = c(seq(1, 12, by = 1)),
+          #                selected = NULL
+          # ),
+          # selectizeInput(inputId = "track_type_in",
+          #                label = i18n$t("Meettraject type"),
+          #                choices = c(seq(1, 12, by = 1)),
+          #                selected = NULL
+          # ),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
-                         choices = c(seq(18, 90, by = 1)),
+                         choices = c(seq(16, 90, by = 1)),
                          selected = NULL
           ),
           selectizeInput(inputId = "weight_in",
@@ -51,6 +71,62 @@ app_ui <- function(request) {
                          choices = c(seq(1, 12, by = 1)),
                          selected = NULL
           ),
+          # selectizeInput(inputId = "behandeling_clustered_in",
+          #                label = i18n$t("Behandeling"),
+          #                choices = c(seq(1, 12, by = 1)),
+          #                selected = NULL
+          # ),
+          selectizeInput(inputId = "height_in",
+                         label = i18n$t("Lengte"),
+                         choices = c(seq(1, 12, by = 1)),
+                         selected = NULL
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "nrspainload_score_in",
+                           label = i18n$t("NRS pijn bij belasting score"),
+                           choices = c(seq(1, 10, by = 1)),
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_nrspainload_score")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "nrsfunction_score_in",
+                           label = i18n$t("NRS functie score"),
+                           choices = c(seq(1, 10, by = 1)),
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_nrsfunction_score")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "ipqconcern_SQ001_in",
+                           label = i18n$t("IPQ item Concern"),
+                           choices = c(seq(1, 10, by = 1)),
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_ipqconcern_SQ001")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "ipqemotionalresponse_SQ001_in",
+                           label = i18n$t("IPQ item Emotional Response"),
+                           choices = c(seq(1, 10, by = 1)),
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_ipqemotionalresponse_SQ001")
+          ),
+          # selectizeInput(inputId = "primPSN_int_in",
+          #                label = i18n$t("PMG baseline score"),
+          #                choices = c(seq(1, 12, by = 1)),
+          #                selected = NULL
+          # ),
+          # selectizeInput(inputId = "primPSN_satisf_in",
+          #                label = i18n$t("PMG score nodig om tevreden te zijn"),
+          #                choices = c(seq(1, 12, by = 1)),
+          #                selected = NULL
+          # ),
           hr(style = "color: grey")
         ),
         div(
@@ -74,7 +150,7 @@ app_ui <- function(request) {
             card_body(
               class = "slider-card align-items-center",
               selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Kies een domein:"),
+                             label = i18n$t("Primaire doel domein:"),
                              choices = NULL
                              ),
               layout_column_wrap(
@@ -104,10 +180,27 @@ app_ui <- function(request) {
           )
         ),
         card(
-          card_header("Sankey plot"),
+          class = "sankey_therapie",
+          card_header("Sankey therapie (en injectie)"),
           card_body(
-            fullscreen_this(highchartOutput("sankey_therapie")),
-            hr(id = "divider", style = "color: grey"),
+            checkboxInput(inputId = "injection_in",
+                          label = i18n$t("Injectie"),
+                          value = FALSE
+            ),
+            fullscreen_this(highchartOutput("sankey_therapie"))
+          )
+        ),
+        card(
+          class = "sankey_injectie",
+          card_header("Sankey injectie"),
+          card_body(
+            fullscreen_this(highchartOutput("sankey_injectie"))
+          )
+        ),
+        card(
+          class = "sankey_operatie",
+          card_header("Sankey operatie"),
+          card_body(
             fullscreen_this(highchartOutput("sankey_operatie", width = "59%"))
           )
         )
