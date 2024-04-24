@@ -164,10 +164,10 @@ app_server <- function(input, output, session) {
                          inputId = "domain_in",
                          choices = setNames(c("pijn", "tintelingen", "doofheid",
                                               "kracht", "activiteiten",
-                                              "mobiliteit/flexibiliteit", "uiterlijk"),
+                                              "soepelheid/beweeglijkheid", "uiterlijk"),
                                             c(i18n()$t("Pijn"),i18n()$t("Tintelingen"),i18n()$t("Doofheid")
                                               ,i18n()$t("Kracht"), i18n()$t("Activiteiten")
-                                              ,i18n()$t("Mobiliteit/flexibiliteit"), i18n()$t("Uiterlijk"))),
+                                              ,i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk"))),
                          selected = isolate(v$dt_input$PrimaryGoal.x)
     )
 
