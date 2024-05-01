@@ -92,6 +92,10 @@
   font-weight: bold;
 }
 
+.rood_text {
+  color: var(--red);
+}
+
 .bslib-sidebar-layout>.sidebar {
   background-color: #cbd4e4;
 }
@@ -123,6 +127,8 @@
   fill: none;
 }
 
-
+.selectize-dropdown-content {
+  height: 150px;
+}
 
 

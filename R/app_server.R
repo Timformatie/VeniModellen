@@ -30,6 +30,9 @@ app_server <- function(input, output, session) {
 
   # Initialiseer reactiveVal's
   selected_domain <- reactiveVal()
+  negative_goal <- reactiveVal(NULL)
+  url_value <- reactiveVal(NULL)
+  update_slider <- reactiveVal(NULL)
 
   # Initialiseer datatable with input values ----
   v <- reactiveValues(dt_input = data.table(Behandeling_clustered = NULL,
@@ -50,9 +53,11 @@ app_server <- function(input, output, session) {
                                             ))
 
 
+
+
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
-  observe( {
+  observeEvent(url_value, {
 
     dt <- isolate(v$dt_input)
 
@@ -74,16 +79,7 @@ app_server <- function(input, output, session) {
 
   })
 
-  # Calculate PMG
-  PMG_val <- reactive({
-    PMG <- abs(as.numeric(v$dt_input$PrimPSN_Satisf) - as.numeric(v$dt_input$PrimPSN_Int))
-    return(PMG)
-  })
-
-  # Init variable (--> makes sure slider arrow and colors are correct)
-  init <- reactiveVal(TRUE)
-
-  # Initialiseer inputs with current input values ----
+  # Initialiseer inputs with current values ----
   observe({
 
     updateSelectizeInput(session = session,
@@ -164,7 +160,6 @@ app_server <- function(input, output, session) {
                          selected = isolate(v$dt_input$PrimPSN_Satisf)
     )
 
-    #TODO: Get primary goal from link
     updateSelectizeInput(session = session,
                          inputId = "domain_in",
                          choices = setNames(c("pijn", "tintelingen", "doofheid",
@@ -180,52 +175,11 @@ app_server <- function(input, output, session) {
     current_val <- isolate(v$dt_input$PrimPSN_Int)
     goal_val <- isolate(v$dt_input$PrimPSN_Satisf)
     range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
-
     updateSliderInput(session = session,
                       inputId = "pmg_slider",
                       value = range_vector
     )
 
-  })
-
-  #Determine slider values
-  slider_value_list <- reactive({
-    req(!is.null(selected_domain()))
-
-    if (selected_domain() %in% reverse_domains) {
-      current_val <- min(input$pmg_slider)
-      goal_val <- max(input$pmg_slider)
-    } else {
-      current_val <- max(input$pmg_slider)
-      goal_val <- min(input$pmg_slider)
-    }
-
-    return(c(current_val, goal_val))
-  })
-
-  # Update dataframe with model inputs when slider values change
-  # Add CSS classes to format min and max colors on slider
-  observeEvent(input$pmg_slider, {
-    req(!input$domain_in == "")
-
-    v$dt_input$PrimPSN_Int <- slider_value_list()[1]
-    v$dt_input$PrimPSN_Satisf <- slider_value_list()[2]
-
-  }, ignoreInit = TRUE)
-
-  # Change text ----
-  # Change text according to domain and slider values
-  output$MPG_text <- renderText({
-    req(!selected_domain() == "")
-
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
-
-    selected_domain <- tolower(i18n()$t(input$domain_in))
-
-    text <- paste0(i18n()$t("U scoort nu een"), " ", current_val, i18n()$t(" op "), selected_domain, ". ", i18n()$t("U bent tevreden met een"), " ", goal_val, ".")
-
-    return(text)
   })
 
   # Update slider layout ----
@@ -237,17 +191,15 @@ app_server <- function(input, output, session) {
     selected_domain(input$domain_in)
     v$dt_input$PrimaryGoal.x <- selected_domain()
 
-    if (init() == TRUE) {
-      current_val <- v$dt_input$PrimPSN_Int #slider_value_list()[1]
-      goal_val <- v$dt_input$PrimPSN_Satisf #slider_value_list()[2]
-    } else {
-      v$dt_input$PrimPSN_Int <- slider_value_list()[1]
-      v$dt_input$PrimPSN_Satisf <- slider_value_list()[2]
-      current_val <- v$dt_input$PrimPSN_Int #slider_value_list()[1]
-      goal_val <- v$dt_input$PrimPSN_Satisf #slider_value_list()[2]
+    current_val <- v$dt_input$PrimPSN_Int
+    goal_val <- v$dt_input$PrimPSN_Satisf
+    goal <- isolate(v$dt_input$PrimaryGoal.x)
+    negative_goal(FALSE)
+    if (goal %in% reverse_domains & (goal_val < current_val)) {
+      negative_goal(TRUE)
+    } else if (!(goal %in% reverse_domains) & goal_val > current_val) {
+      negative_goal(TRUE)
     }
-
-    init(FALSE)
 
     if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
       removeClass(selector = ".irs--shiny .irs-min", class = "groen")
@@ -268,6 +220,7 @@ app_server <- function(input, output, session) {
         removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
         addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
         addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
         addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
       }
     } else {
@@ -288,7 +241,9 @@ app_server <- function(input, output, session) {
       } else {
         removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
         addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
         addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
         addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
       }
     }
@@ -297,7 +252,130 @@ app_server <- function(input, output, session) {
 
   }, ignoreInit = TRUE)
 
+  observeEvent(negative_goal(), {
+    if (negative_goal()) {
+      show(id = "reset_negative_goal_btn")
+    } else {
+      hide(id = "reset_negative_goal_btn")
+    }
+
+  })
+
+  # Change text ----
+  # Change text according to domain and slider values
+  output$MPG_text <- renderText({
+    req(!selected_domain() == "")
+
+    current_val <- v$dt_input$PrimPSN_Int
+    goal_val <- v$dt_input$PrimPSN_Satisf
+
+    selected_domain <- tolower(i18n()$t(input$domain_in))
+
+    if (negative_goal()) {
+      text <- paste0(i18n()$t("Let op: u heeft een verslechtering als doel gekozen. Kies een ander doel of klik op de knop hieronder."))
+      addClass(selector = ".MPG_text", class = "rood_text")
+    } else {
+      text <- paste0(i18n()$t("U scoort nu een"), " ", current_val, i18n()$t(" op "), selected_domain, ". ", i18n()$t("U bent tevreden met een"), " ", goal_val, ".")
+      removeClass(selector = ".MPG_text", class = "rood_text")
+      }
+
+    return(text)
+  })
+
+  observeEvent(input$reset_negative_goal_btn, {
+    negative_goal(FALSE)
+
+    current_val <- v$dt_input$PrimPSN_Int
+    if (selected_domain() %in% reverse_domains) {
+      v$dt_input$PrimPSN_Satisf <- current_val + 1
+    } else {
+      v$dt_input$PrimPSN_Satisf <- current_val - 1
+    }
+    goal_val <- v$dt_input$PrimPSN_Satisf
+
+    range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
+
+    updateSliderInput(session = session,
+                      inputId = "pmg_slider",
+                      value = range_vector
+    )
+
+  })
+
+  observe({
+    invalidateLater(millis = 1000)
+    current_val <- v$dt_input$PrimPSN_Int
+    goal_val <- v$dt_input$PrimPSN_Satisf
+
+    if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
+      removeClass(selector = ".irs--shiny .irs-min", class = "groen")
+      removeClass(selector = ".irs--shiny .irs-max", class = "rood")
+      addClass(selector = ".irs--shiny .irs-min", class = "rood")
+      addClass(selector = ".irs--shiny .irs-max", class = "groen")
+      shinyjs::hide(id = "happy-smiley-left")
+      shinyjs::show(id = "sad-smiley-left")
+      shinyjs::show(id = "happy-smiley-right")
+      shinyjs::hide(id = "sad-smiley-right")
+      if (goal_val >= current_val) {
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
+        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
+      } else {
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
+        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
+      }
+    } else {
+      removeClass(selector = ".irs--shiny .irs-min", class = "rood")
+      removeClass(selector = ".irs--shiny .irs-max", class = "groen")
+      addClass(selector = ".irs--shiny .irs-min", class = "groen")
+      addClass(selector = ".irs--shiny .irs-max", class = "rood")
+      shinyjs::show(id = "happy-smiley-left")
+      shinyjs::hide(id = "sad-smiley-left")
+      shinyjs::hide(id = "happy-smiley-right")
+      shinyjs::show(id = "sad-smiley-right")
+      if (goal_val <= current_val) {
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
+        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
+      } else {
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
+        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
+        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
+        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
+        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
+      }
+    }
+
+  })
+
+
   # Update input datatable wanneer input verandert ----
+  # Update dataframe with current and goal value inputs when slider values change
+  observeEvent(input$pmg_slider, {
+    req(!input$domain_in == "")
+    req((!negative_goal()))
+
+    if (selected_domain() %in% reverse_domains) {
+      current_val <- min(input$pmg_slider)
+      goal_val <- max(input$pmg_slider)
+    } else {
+      current_val <- max(input$pmg_slider)
+      goal_val <- min(input$pmg_slider)
+    }
+
+    v$dt_input$PrimPSN_Int <- current_val
+    v$dt_input$PrimPSN_Satisf <- goal_val
+
+  }, ignoreInit = TRUE)
+
   observeEvent(input$age_in, {
     v$dt_input[["Age"]] <- as.numeric(input$age_in)
   })
@@ -348,7 +426,11 @@ app_server <- function(input, output, session) {
     v$dt_input[["height"]] <- as.numeric(input$height_in)
   })
 
-
+  # Calculate PMG
+  PMG_val <- reactive({
+    PMG <- abs(as.numeric(v$dt_input$PrimPSN_Satisf) - as.numeric(v$dt_input$PrimPSN_Int))
+    return(PMG)
+  })
 
   # 1. Sankey therapie ----
   ## predictions ----

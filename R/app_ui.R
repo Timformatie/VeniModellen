@@ -175,7 +175,12 @@ app_ui <- function(request) {
                   img(id = "happy-smiley-right", src = "www/happy-smiley.webp", height = 25, width = 25, class = "hide")
                 )
               ),
-              textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text")
+              textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text"),
+              hidden(
+                actionButton(inputId = "reset_negative_goal_btn",
+                           label = "Reset waarden"
+                           )
+              )
             )
           )
         ),
