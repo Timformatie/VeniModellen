@@ -57,6 +57,11 @@ to_therapie_nl <- c("doel <br> behaald","doel niet <br> behaald", "operatie", "g
 from_therapie_en <- c("nonsurgical <br> treatment","nonsurgical <br> treatment", "goal not <br> obtained", "goal not <br> obtained", "surgical <br> treatment", "surgical <br> treatment")
 to_therapie_en <- c("goal <br> obtained","goal not <br> obtained", "surgical <br> treatment", "no surgical <br> treatment", "goal <br> obtained ", "goal not <br> obtained ")
 
+from_injection_nl <- c("injectie","injectie", "doel niet <br> behaald", "doel niet <br> behaald", "operatie", "operatie")
+to_injection_nl <- c("doel <br> behaald","doel niet <br> behaald", "operatie", "geen <br> operatie", "doel <br> behaald ", "doel niet <br> behaald ")
+from_injection_en <- c("injection","injection", "goal not <br> obtained", "goal not <br> obtained", "surgical <br> treatment", "surgical <br> treatment")
+to_injection_en <- c("goal <br> obtained","goal not <br> obtained", "surgical <br> treatment", "no surgical <br> treatment", "goal <br> obtained ", "goal not <br> obtained ")
+
 from_operatie_nl <- c("operatie", "operatie")
 to_operatie_nl <- c("doel <br> behaald","doel niet <br> behaald")
 from_operatie_en <- c("surgical <br> treatment","surgical <br> treatment")
@@ -73,6 +78,10 @@ usethis::use_data(dt_sankey_1,
                   from_therapie_en,
                   to_therapie_nl,
                   to_therapie_en,
+                  from_injection_nl,
+                  from_injection_en,
+                  to_injection_nl,
+                  to_injection_en,
                   from_operatie_nl,
                   to_operatie_nl,
                   from_operatie_en,

@@ -131,4 +131,8 @@
   height: 150px;
 }
 
-
+#reset_negative_goal_btn {
+  background-color: #4876b3;
+  color: white;
+  border: none;
+}

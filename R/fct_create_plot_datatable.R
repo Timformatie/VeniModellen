@@ -22,6 +22,10 @@ create_plot_datatable <- function(dt_pred, language, treatment_type, PMG) {
     from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
     to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
     weight_values <- c(round(dt_pred[1,Yes]*100), round(dt_pred[1,No]*100), X_continue_surgery, X_no_surgery, round(dt_pred[2,Yes]*100), round(dt_pred[2,No]*100))
+  } else if (treatment_type == "injectie") {
+    from_values <- if (language == "nl") from_injection_nl else from_injection_en
+    to_values <- if (language == "nl") to_injection_nl else to_injection_en
+    weight_values <- c(round(dt_pred[1,Yes]*100), round(dt_pred[1,No]*100), X_continue_surgery, X_no_surgery, round(dt_pred[2,Yes]*100), round(dt_pred[2,No]*100))
   } else {
     from_values <- if (language == "nl") from_operatie_nl else from_operatie_en
     to_values <- if (language == "nl") to_operatie_nl else to_operatie_en

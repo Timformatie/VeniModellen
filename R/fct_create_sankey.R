@@ -55,6 +55,7 @@ create_sankey <- function(data, language, PMG) {
               hcaes(from = from, to = to, weight = weight),
               name = "Basic Sankey Diagram",
               nodes = list(list(id = from_values[1], color = color_list$grey),
+                           list(id = "injectie", color = color_list$grey),
                            list(id = to_values[1], color = color_list$green),
                            list(id = to_values[2], color = color_list$red),
                            list(id = to_values[3], color = color_list$grey),

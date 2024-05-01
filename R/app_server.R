@@ -193,7 +193,7 @@ app_server <- function(input, output, session) {
 
     current_val <- v$dt_input$PrimPSN_Int
     goal_val <- v$dt_input$PrimPSN_Satisf
-    goal <- isolate(v$dt_input$PrimaryGoal.x)
+    goal <- selected_domain()
     negative_goal(FALSE)
     if (goal %in% reverse_domains & (goal_val < current_val)) {
       negative_goal(TRUE)
@@ -201,57 +201,13 @@ app_server <- function(input, output, session) {
       negative_goal(TRUE)
     }
 
-    if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
-      removeClass(selector = ".irs--shiny .irs-min", class = "groen")
-      removeClass(selector = ".irs--shiny .irs-max", class = "rood")
-      addClass(selector = ".irs--shiny .irs-min", class = "rood")
-      addClass(selector = ".irs--shiny .irs-max", class = "groen")
-      shinyjs::hide(id = "happy-smiley-left")
-      shinyjs::show(id = "sad-smiley-left")
-      shinyjs::show(id = "happy-smiley-right")
-      shinyjs::hide(id = "sad-smiley-right")
-      if (goal_val >= current_val) {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
-        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
-      } else {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
-      }
-    } else {
-      removeClass(selector = ".irs--shiny .irs-min", class = "rood")
-      removeClass(selector = ".irs--shiny .irs-max", class = "groen")
-      addClass(selector = ".irs--shiny .irs-min", class = "groen")
-      addClass(selector = ".irs--shiny .irs-max", class = "rood")
-      shinyjs::show(id = "happy-smiley-left")
-      shinyjs::hide(id = "sad-smiley-left")
-      shinyjs::hide(id = "happy-smiley-right")
-      shinyjs::show(id = "sad-smiley-right")
-      if (goal_val <= current_val) {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
-        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
-      } else {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
-      }
-    }
+    update_slider_layout(goal, current_val, goal_val)
 
     waiter_hide()
 
   }, ignoreInit = TRUE)
 
+  # Determine if button for resetting goal values should be shown
   observeEvent(negative_goal(), {
     if (negative_goal()) {
       show(id = "reset_negative_goal_btn")
@@ -282,6 +238,7 @@ app_server <- function(input, output, session) {
     return(text)
   })
 
+  # Reset goal values
   observeEvent(input$reset_negative_goal_btn, {
     negative_goal(FALSE)
 
@@ -302,61 +259,6 @@ app_server <- function(input, output, session) {
 
   })
 
-  observe({
-    invalidateLater(millis = 1000)
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
-
-    if (tolower(input$domain_in) %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
-      removeClass(selector = ".irs--shiny .irs-min", class = "groen")
-      removeClass(selector = ".irs--shiny .irs-max", class = "rood")
-      addClass(selector = ".irs--shiny .irs-min", class = "rood")
-      addClass(selector = ".irs--shiny .irs-max", class = "groen")
-      shinyjs::hide(id = "happy-smiley-left")
-      shinyjs::show(id = "sad-smiley-left")
-      shinyjs::show(id = "happy-smiley-right")
-      shinyjs::hide(id = "sad-smiley-right")
-      if (goal_val >= current_val) {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
-        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
-      } else {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
-      }
-    } else {
-      removeClass(selector = ".irs--shiny .irs-min", class = "rood")
-      removeClass(selector = ".irs--shiny .irs-max", class = "groen")
-      addClass(selector = ".irs--shiny .irs-min", class = "groen")
-      addClass(selector = ".irs--shiny .irs-max", class = "rood")
-      shinyjs::show(id = "happy-smiley-left")
-      shinyjs::hide(id = "sad-smiley-left")
-      shinyjs::hide(id = "happy-smiley-right")
-      shinyjs::show(id = "sad-smiley-right")
-      if (goal_val <= current_val) {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "rood")
-        addClass(selector = ".irs.irs--shiny .irs-bar.left-arrow", class = "groen")
-      } else {
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "left-arrow")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "right-arrow")
-        removeClass(selector = ".irs.irs--shiny .irs-bar", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar", class = "rood")
-        removeClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "groen")
-        addClass(selector = ".irs.irs--shiny .irs-bar.right-arrow", class = "rood")
-      }
-    }
-
-  })
-
-
   # Update input datatable wanneer input verandert ----
   # Update dataframe with current and goal value inputs when slider values change
   observeEvent(input$pmg_slider, {
@@ -373,6 +275,8 @@ app_server <- function(input, output, session) {
 
     v$dt_input$PrimPSN_Int <- current_val
     v$dt_input$PrimPSN_Satisf <- goal_val
+
+    update_slider_layout(selected_domain(), current_val, goal_val)
 
   }, ignoreInit = TRUE)
 
@@ -438,15 +342,8 @@ app_server <- function(input, output, session) {
     req(!is.null(selected_domain()))
 
     # Goal should be positive, otherwise don't show predictions
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
-    if (selected_domain() %in% reverse_domains) {
-      goal_positive <- ifelse(goal_val >= current_val, TRUE, FALSE)
-    } else {
-      goal_positive <- ifelse(goal_val <= current_val, TRUE, FALSE)
-    }
     validate(
-      need(goal_positive, "U heeft een verslechtering als doel gekozen.")
+      need(!negative_goal(), "U heeft een verslechtering als doel gekozen.")
     )
 
     # Get input data
@@ -493,15 +390,8 @@ app_server <- function(input, output, session) {
     req(!is.null(selected_domain()))
 
     # Goal should be positive
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
-    if (selected_domain() %in% reverse_domains) {
-      goal_positive <- ifelse(goal_val >= current_val, TRUE, FALSE)
-    } else {
-      goal_positive <- ifelse(goal_val <= current_val, TRUE, FALSE)
-    }
     validate(
-      need(goal_positive, "U heeft een verslechtering als doel gekozen.")
+      need(!negative_goal(), "U heeft een verslechtering als doel gekozen.")
     )
 
     # Get input data
@@ -529,7 +419,7 @@ app_server <- function(input, output, session) {
   dt_results_injectie <- reactive({
     dt_pred <- dt_pred_injectie()
     dt_sankey_injectie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in,
-                                                treatment_type = "therapie",
+                                                treatment_type = "injectie",
                                                 PMG = PMG_val())
     return(dt_sankey_injectie)
   })
@@ -541,15 +431,8 @@ app_server <- function(input, output, session) {
     req(!is.null(selected_domain()))
 
     # Goal should be positive
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
-    if (selected_domain() %in% reverse_domains) {
-      goal_positive <- ifelse(goal_val >= current_val, TRUE, FALSE)
-    } else {
-      goal_positive <- ifelse(goal_val <= current_val, TRUE, FALSE)
-    }
     validate(
-      need(goal_positive, "U heeft een verslechtering als doel gekozen.")
+      need(!negative_goal(), "U heeft een verslechtering als doel gekozen.")
     )
 
     # Get input data
