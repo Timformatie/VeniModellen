@@ -180,6 +180,7 @@ app_server <- function(input, output, session) {
                          selected = isolate(v$dt_input$PrimaryGoal.x)
                          )
 
+
   })
 
   # Get current and goal values for selected domain and update slider
@@ -493,26 +494,26 @@ app_server <- function(input, output, session) {
     return(plot)
   })
 
-  # Hide/show plots ----
+  # Hide/show plots according to user input ----
   observeEvent(input$show_therapie, {
     if (input$show_therapie == TRUE) {
-      shinyjs::show(selector = "div.sankey_therapie")
+      show(selector = "div.sankey_therapie")
     } else {
-      shinyjs::hide(selector = "div.sankey_therapie")
+      hide(selector = "div.sankey_therapie")
     }
   })
   observeEvent(input$show_injectie, {
     if (input$show_injectie == TRUE) {
-      shinyjs::show(selector = "div.sankey_injectie")
+      show(selector = "div.sankey_injectie")
     } else {
-      shinyjs::hide(selector = "div.sankey_injectie")
+      hide(selector = "div.sankey_injectie")
     }
   })
   observeEvent(input$show_operatie, {
     if (input$show_operatie == TRUE) {
-      shinyjs::show(selector = "div.sankey_operatie")
+      show(selector = "div.sankey_operatie")
     } else {
-      shinyjs::hide(selector = "div.sankey_operatie")
+      hide(selector = "div.sankey_operatie")
     }
   })
 

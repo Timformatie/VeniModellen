@@ -1,13 +1,11 @@
 #' create_modal
 #'
-#' @description A fct function
+#' @description creates modal for modifying model input
 #'
-#' @return The return value, if any, from executing the function.
+#' @return returns a modal
 #'
 #' @noRd
 create_modal <- function(question, dt_input, i18n) {
-
-  #edit_question(question)
 
   question_text <- dt_questions[Variable == question, `Informatie/mouse over NL`]
   input_id <- paste0(question, "_modal_in")
