@@ -8,7 +8,7 @@ color_list <- list(grey = '#69696990',
 #model <- get(load("inst/extdata/model_train_nnet_after_rfe_20240311.RData"))
 model <- get(load("inst/extdata/model_train_gbm_after_rfe_20240311.RData"))
 
-reverse_domains <- c("kracht", "uiterlijk", "activiteiten", "soepelheid/beweeglijkheid", "uiterlijk")
+reverse_domains <- c("kracht", "uiterlijk", "activiteiten uitvoeren", "soepelheid/beweeglijkheid", "werk uitvoeren")
 
 dt_continue_surgery <- data.table::data.table(readxl::read_excel("inst/extdata/continue_surgery.xlsx", range = "A2:L5"))
 dt_continue_surgery = data.table::dcast(data.table::melt(dt_continue_surgery, id.vars = "PMG waarde"), variable ~ `PMG waarde`)

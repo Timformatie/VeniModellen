@@ -62,7 +62,7 @@ app_ui <- function(request) {
                          selected = NULL
           ),
           selectizeInput(inputId = "weight_in",
-                         label = i18n$t("Gewicht"),
+                         label = i18n$t("Gewicht (in kg)"),
                          choices = c(seq(40, 200, by = 1)),
                          selected = NULL
           ),
@@ -77,7 +77,7 @@ app_ui <- function(request) {
           #                selected = NULL
           # ),
           selectizeInput(inputId = "height_in",
-                         label = i18n$t("Lengte"),
+                         label = i18n$t("Lengte (in cm)"),
                          choices = c(seq(1, 12, by = 1)),
                          selected = NULL
           ),
@@ -150,7 +150,7 @@ app_ui <- function(request) {
             card_body(
               class = "slider-card align-items-center",
               selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Primaire doel domein:"),
+                             label = i18n$t("Primaire doel:"),
                              choices = NULL
                              ),
               layout_column_wrap(
@@ -178,7 +178,7 @@ app_ui <- function(request) {
               textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text"),
               hidden(
                 actionButton(inputId = "reset_negative_goal_btn",
-                           label = "Reset waarden"
+                           label = i18n$t("Reset waarden")
                            )
               )
             )
@@ -186,7 +186,7 @@ app_ui <- function(request) {
         ),
         card(
           class = "sankey_therapie",
-          card_header("Sankey therapie (en injectie)"),
+          card_header(i18n$t("Sankey therapie (en injectie)")),
           card_body(
             checkboxInput(inputId = "injection_in",
                           label = i18n$t("Injectie"),

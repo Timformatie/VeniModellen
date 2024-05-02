@@ -84,13 +84,20 @@ app_server <- function(input, output, session) {
 
     updateSelectizeInput(session = session,
                          inputId = "diagnose_in",
-                         choices = unique(dt_train$Diagnose),
+                         choices = setNames(c("Carpal Tunnel Syndrome", "CMC-1 OA"
+                                              ,"Dupuytren fingers", "M. de Quervain"
+                                              ,"TFCC", "Trigger"),
+                                            c(i18n()$t("Carpaal Tunnel Syndroom"),i18n()$t("CMC-1 artrose")
+                                              ,i18n()$t("M. Dupuytren"), i18n()$t("M. De Quervain")
+                                              ,i18n()$t("TFCC letsel"),i18n()$t("Trigger finger"))),
                          selected = isolate(v$dt_input$Diagnose)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "track_in",
-                         choices = unique(dt_diagnosis_track$Track),
+                         choices = setNames(c("Duim", "Vinger", "Pols", "Zenuw"),
+                                            c(i18n()$t("Duim"),i18n()$t("Vinger"),i18n()$t("Pols")
+                                              ,i18n()$t("Zenuw"))),
                          selected = isolate(v$dt_input$Track)
     )
 
@@ -163,23 +170,27 @@ app_server <- function(input, output, session) {
     updateSelectizeInput(session = session,
                          inputId = "domain_in",
                          choices = setNames(c("pijn", "tintelingen", "doofheid",
-                                              "kracht", "activiteiten",
-                                              "soepelheid/beweeglijkheid", "uiterlijk"),
+                                              "kracht", "activiteiten uitvoeren",
+                                              "soepelheid/beweeglijkheid", "uiterlijk",
+                                              "werk uitvoeren"),
                                             c(i18n()$t("Pijn"),i18n()$t("Tintelingen"),i18n()$t("Doofheid")
-                                              ,i18n()$t("Kracht"), i18n()$t("Activiteiten")
-                                              ,i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk"))),
+                                              ,i18n()$t("Kracht"), i18n()$t("Activiteiten uitvoeren")
+                                              ,i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk")
+                                              ,i18n()$t("Werk uitvoeren"))),
                          selected = isolate(v$dt_input$PrimaryGoal.x)
-    )
+                         )
 
-    # Get current and goal values for selected domain and update slider
+  })
+
+  # Get current and goal values for selected domain and update slider
+  observe({
     current_val <- isolate(v$dt_input$PrimPSN_Int)
     goal_val <- isolate(v$dt_input$PrimPSN_Satisf)
     range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
     updateSliderInput(session = session,
                       inputId = "pmg_slider",
                       value = range_vector
-    )
-
+                      )
   })
 
   # Update slider layout ----
@@ -231,12 +242,18 @@ app_server <- function(input, output, session) {
       text <- paste0(i18n()$t("Let op: u heeft een verslechtering als doel gekozen. Kies een ander doel of klik op de knop hieronder."))
       addClass(selector = ".MPG_text", class = "rood_text")
     } else {
-      text <- paste0(i18n()$t("U scoort nu een"), " ", current_val, i18n()$t(" op "), selected_domain, ". ", i18n()$t("U bent tevreden met een"), " ", goal_val, ".")
-      removeClass(selector = ".MPG_text", class = "rood_text")
+      if (input$language_in == "nl") {
+        text <- str_glue("U scoort nu een {current_val} op {selected_domain}. U bent tevreden met een score van {goal_val}.")
+      } else {
+        text <- str_glue("Your current score for {selected_domain} is {current_val}. Your goal is a score of {goal_val}.")
       }
+      removeClass(selector = ".MPG_text", class = "rood_text")
+    }
 
     return(text)
   })
+
+
 
   # Reset goal values
   observeEvent(input$reset_negative_goal_btn, {
@@ -499,51 +516,39 @@ app_server <- function(input, output, session) {
     }
   })
 
+  # Modify answers modals ----
   edit_question <- reactiveVal()
 
-  create_modal <- function(question) {
+  # Open modal when user clicks pencil icon to modify question answer
+  onclick("edit_icon_nrspainload_score", {
+    create_modal(question = "nrspainload_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    edit_question("nrspainload_score")
+    })
+  onclick("edit_icon_nrsfunction_score", {
+    create_modal(question = "nrsfunction_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    edit_question("nrsfunction_score")
+  })
+  onclick("edit_icon_ipqconcern_SQ001", {
+    create_modal(question = "ipqconcern_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    edit_question("ipqconcern_SQ001")
+  })
+  onclick("edit_icon_ipqemotionalresponse_SQ001", {
+    create_modal(question = "ipqemotionalresponse_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    edit_question("ipqemotionalresponse_SQ001")
+  })
 
-    edit_question(question)
-
-    question_text <- dt_questions[Variable == question, `Informatie/mouse over NL`]
-    input_id <- paste0(question, "_modal_in")
-    label <- dt_questions[Variable == question, `NL label variabele naam`]
-
-    showModal(
-      modalDialog(
-        title = "Vul vraag in",
-        question_text,
-        hr(style = "color: grey"),
-        selectizeInput(inputId = input_id,
-                       label = i18n()$t(label),
-                       choices = c(seq(1, 10, by = 1)),
-                       selected = v$dt_input[[question]]
-        ),
-        size = 'm',
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton("ok", "OK")
-        )
-      )
-    )
-
-  }
-
-  fct_edit_question <- function() {
-    removeModal()
-    edit_question <- edit_question()
-    v$dt_input[[edit_question]] <- as.numeric(input[[paste0(edit_question, "_modal_in")]])
+  # Modify model input and UI input when user clicks "ok" button in modal
+  onclick("ok", {
+    # determine variable to be modified
+    modify_var <- edit_question()
+    # modify variable in model input
+    v$dt_input[[modify_var]] <- as.numeric(input[[paste0(modify_var, "_modal_in")]])
+    # modify corresponding UI input
     updateSelectizeInput(session = session,
-                         inputId = paste0(edit_question, "_in"),
-                         selected = as.numeric(input[[paste0(edit_question, "_modal_in")]])
+                         inputId = paste0(modify_var, "_in"),
+                         selected = as.numeric(input[[paste0(modify_var, "_modal_in")]])
     )
-  }
-
-  onclick("edit_icon_nrspainload_score", create_modal("nrspainload_score"))
-  onclick("edit_icon_nrsfunction_score", create_modal("nrsfunction_score"))
-  onclick("edit_icon_ipqconcern_SQ001", create_modal("ipqconcern_SQ001"))
-  onclick("edit_icon_ipqemotionalresponse_SQ001", create_modal("ipqemotionalresponse_SQ001"))
-
-  onclick("ok", fct_edit_question())
+    removeModal()
+  })
 
 }

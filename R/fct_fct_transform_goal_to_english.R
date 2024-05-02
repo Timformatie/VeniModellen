@@ -10,7 +10,7 @@ transform_goal_to_english <- function(goal) {
   # Translate primary goal to english
   goal <- case_when(
     goal == "pijn" ~ "Pain",
-    goal == "activiteiten" ~ "Activities",
+    goal == "activiteiten uitvoeren" ~ "Activities",
     goal == "tintelingen" ~ "Tingling",
     goal == "soepelheid/beweeglijkheid" ~ "Mobility/flexibility",
     goal == "kracht" ~ "Strength",
