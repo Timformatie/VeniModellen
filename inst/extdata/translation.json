@@ -14,6 +14,13 @@
     {"en": "Strength", "nl": "Kracht"},
     {"en": "Deafness", "nl": "Doofheid"},
     {"en": "Tingling", "nl": "Tintelingen"},
-    {"en": "Choose a domain:", "nl": "Kies een domein:"}
+    {"en": "pain", "nl": "pijn"},
+    {"en": "strength", "nl": "kracht"},
+    {"en": "deafness", "nl": "doofheid"},
+    {"en": "tingling", "nl": "tintelingen"},
+    {"en": "Choose a domain:", "nl": "Kies een domein:"},
+    {"en": "You currently score", "nl": "U scoort nu een"},
+    {"en": " for ", "nl": " op "},
+    {"en": "Your goal is", "nl":"U bent tevreden met een"}
   ]
 }

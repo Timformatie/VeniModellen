@@ -13,21 +13,39 @@
     font-size: 16px;
 }
 
-.irs--shiny .irs-bar::before {
-  height: 0px;
+.irs.irs--shiny .irs-bar {
+  background-color: #4876b3!important;
 }
 
-.irs.irs--shiny .irs-bar {
-  background-color: black!important;
+.irs.irs--shiny .irs-bar.left-arrow::after{
+  content:'';
+  position:absolute;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 15px solid #4976b3;
+  left: 8px;
+  top:450%;
+  margin-top: -20px;
+}
+
+.irs.irs--shiny .irs-bar.right-arrow::after{
+    content: "";
+    position: absolute;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 15px solid #4976b3;
+    right: 8px;
+    top: 450%;
+    margin-top: -20px;
 }
 
 .rood {
-  background: red!important;
+  background: rgb(210, 67, 66)!important;
   color: white!important;
 }
 
 .groen {
-  background: green!important;
+  background: rgb(105, 172, 60)!important;
   color: white!important;
 }
 
@@ -57,3 +75,21 @@
   color: white;
   letter-spacing: 0.2rem;
 }
+
+.smiley-left {
+  text-align: end;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: inline;
+}
+
+.highcharts-text-outline {
+  stroke-width: 0;
+  fill: none;
+}
+
