@@ -87,5 +87,4 @@ usethis::use_data(dt_sankey_1,
                   from_operatie_en,
                   to_operatie_en,
                   model,
-                  reverse_domains,
                   overwrite = TRUE)
