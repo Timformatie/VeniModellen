@@ -377,6 +377,12 @@ app_server <- function(input, output, session) {
       dt_input$Behandeling_clustered <- "Hand therapy ± orthosis + injection"
     }
 
+    # When domain score lower is better (like pain), reverse variable scale
+    if (!selected_domain() %in% reverse_domains) {
+      dt_input$PrimPSN_Int <- 10 - dt_input$PrimPSN_Int
+      dt_input$PrimPSN_Satisf <- 10 - dt_input$PrimPSN_Satisf
+    }
+
     # Predict probs for therapy
     pred_therapie <- predict(model, dt_input, type = "prob")
 
@@ -417,6 +423,12 @@ app_server <- function(input, output, session) {
 
     # Transform goal from dutch to english
     dt_input$PrimaryGoal.x <- transform_goal_to_english(dt_input$PrimaryGoal.x)
+
+    # When domain score lower is better (like pain), reverse variable scale
+    if (!selected_domain() %in% reverse_domains) {
+      dt_input$PrimPSN_Int <- 10 - dt_input$PrimPSN_Int
+      dt_input$PrimPSN_Satisf <- 10 - dt_input$PrimPSN_Satisf
+    }
 
     # Treatment input
     dt_input$Behandeling_clustered <- "Injection"
@@ -461,6 +473,12 @@ app_server <- function(input, output, session) {
 
     # Determine treatment/surgery based on diagnosis
     dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Behandeling]
+
+    # When domain score lower is better (like pain), reverse variable scale
+    if (!selected_domain() %in% reverse_domains) {
+      dt_input$PrimPSN_Int <- 10 - dt_input$PrimPSN_Int
+      dt_input$PrimPSN_Satisf <- 10 - dt_input$PrimPSN_Satisf
+    }
 
     # Predict probs
     pred_operatie <- data.table(predict(model, dt_input, type = "prob"))
@@ -522,19 +540,19 @@ app_server <- function(input, output, session) {
 
   # Open modal when user clicks pencil icon to modify question answer
   onclick("edit_icon_nrspainload_score", {
-    create_modal(question = "nrspainload_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "nrspainload_score", dt_input = v$dt_input, i18n = reactive(i18n()))
     edit_question("nrspainload_score")
     })
   onclick("edit_icon_nrsfunction_score", {
-    create_modal(question = "nrsfunction_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "nrsfunction_score", dt_input = v$dt_input, i18n = reactive(i18n()))
     edit_question("nrsfunction_score")
   })
   onclick("edit_icon_ipqconcern_SQ001", {
-    create_modal(question = "ipqconcern_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "ipqconcern_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
     edit_question("ipqconcern_SQ001")
   })
   onclick("edit_icon_ipqemotionalresponse_SQ001", {
-    create_modal(question = "ipqemotionalresponse_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "ipqemotionalresponse_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
     edit_question("ipqemotionalresponse_SQ001")
   })
 

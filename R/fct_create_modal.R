@@ -2,10 +2,14 @@
 #'
 #' @description creates modal for modifying model input
 #'
+#' @param input_var input variable which needs to be edited
+#' @param dt_input current model input datatable
+#' @param i18n translator
+#'
 #' @return returns a modal
 #'
 #' @noRd
-create_modal <- function(question, dt_input, i18n) {
+create_modal <- function(input_var, dt_input, i18n) {
 
   question_text <- dt_questions[Variable == question, `Informatie/mouse over NL`]
   input_id <- paste0(question, "_modal_in")
@@ -21,7 +25,7 @@ create_modal <- function(question, dt_input, i18n) {
                      choices = c(seq(1, 10, by = 1)),
                      selected = dt_input[[question]]
       ),
-      size = 'm',
+      size = "m",
       footer = tagList(
         modalButton("Cancel"),
         actionButton("ok", "OK")

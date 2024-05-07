@@ -1,8 +1,10 @@
 #' fct_transform_goal_to_english
 #'
-#' @description A fct function
+#' @description this function translates the user selected primary goal from Dutch to English
 #'
-#' @return The return value, if any, from executing the function.
+#' @param goal goal which should be translated from Dutch to English
+#'
+#' @return primary goal translated to English
 #'
 #' @noRd
 transform_goal_to_english <- function(goal) {

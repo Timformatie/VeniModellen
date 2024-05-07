@@ -1,8 +1,12 @@
 #' fct_slider_layout
 #'
-#' @description A fct function
+#' @description this function determines the layout for the slider input (color and direction of arrow)
 #'
-#' @return The return value, if any, from executing the function.
+#' @param domain user selected primary goal
+#' @param current_val current score for patient for primary goal
+#' @param goal_val goal score for patient for primary goal
+#'
+#' @return returns the correct slider layout
 #'
 #' @noRd
 update_slider_layout <- function(domain, current_val, goal_val) {

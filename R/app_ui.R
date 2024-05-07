@@ -48,44 +48,39 @@ app_ui <- function(request) {
           ),
           selectizeInput(inputId = "track_in",
                          label = i18n$t("Meettraject"),
-                         choices = c(seq(1, 12, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "track_type_in",
                          label = i18n$t("Meettraject type"),
-                         choices = c(seq(1, 12, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
-                         choices = c(seq(16, 90, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "weight_in",
                          label = i18n$t("Gewicht (in kg)"),
-                         choices = c(seq(40, 200, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "duration_in",
                          label = i18n$t("Duur klachten (maanden)"),
-                         choices = c(seq(1, 12, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
-          # selectizeInput(inputId = "behandeling_clustered_in",
-          #                label = i18n$t("Behandeling"),
-          #                choices = c(seq(1, 12, by = 1)),
-          #                selected = NULL
-          # ),
           selectizeInput(inputId = "height_in",
                          label = i18n$t("Lengte (in cm)"),
-                         choices = c(seq(1, 12, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           div(
             style = "display: flex",
             selectizeInput(inputId = "nrspainload_score_in",
                            label = i18n$t("NRS pijn bij belasting score"),
-                           choices = c(seq(1, 10, by = 1)),
+                           choices = NULL,
                            selected = NULL
             ),
             div(icon("pen"), id = "edit_icon_nrspainload_score")
@@ -94,7 +89,7 @@ app_ui <- function(request) {
             style = "display: flex",
             selectizeInput(inputId = "nrsfunction_score_in",
                            label = i18n$t("NRS functie score"),
-                           choices = c(seq(1, 10, by = 1)),
+                           choices = NULL,
                            selected = NULL
             ),
             div(icon("pen"), id = "edit_icon_nrsfunction_score")
@@ -103,7 +98,7 @@ app_ui <- function(request) {
             style = "display: flex",
             selectizeInput(inputId = "ipqconcern_SQ001_in",
                            label = i18n$t("IPQ item Concern"),
-                           choices = c(seq(1, 10, by = 1)),
+                           choices = NULL,
                            selected = NULL
             ),
             div(icon("pen"), id = "edit_icon_ipqconcern_SQ001")
@@ -112,21 +107,11 @@ app_ui <- function(request) {
             style = "display: flex",
             selectizeInput(inputId = "ipqemotionalresponse_SQ001_in",
                            label = i18n$t("IPQ item Emotional Response"),
-                           choices = c(seq(1, 10, by = 1)),
+                           choices = NULL,
                            selected = NULL
             ),
             div(icon("pen"), id = "edit_icon_ipqemotionalresponse_SQ001")
           ),
-          # selectizeInput(inputId = "primPSN_int_in",
-          #                label = i18n$t("PMG baseline score"),
-          #                choices = c(seq(1, 12, by = 1)),
-          #                selected = NULL
-          # ),
-          # selectizeInput(inputId = "primPSN_satisf_in",
-          #                label = i18n$t("PMG score nodig om tevreden te zijn"),
-          #                choices = c(seq(1, 12, by = 1)),
-          #                selected = NULL
-          # ),
           hr(style = "color: grey")
         ),
         div(
@@ -178,8 +163,8 @@ app_ui <- function(request) {
               textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text"),
               hidden(
                 actionButton(inputId = "reset_negative_goal_btn",
-                           label = i18n$t("Reset waarden")
-                           )
+                             label = i18n$t("Reset waarden")
+                             )
               )
             )
           )

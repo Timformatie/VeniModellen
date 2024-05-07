@@ -4,21 +4,19 @@
 #'
 #' @param data the dataframe needed to create the Sankey plot
 #' @param language language selected by user
+#' @param PMG calculated value for PMG
 #'
 #' @return A Sankey plot.
 #'
-#' @noRd
-#'
 #' @import highcharter
 #' @import dplyr
+#'
+#' @noRd
 create_sankey <- function(data, language, PMG) {
-
-  from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
-  to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
 
   # Add text that is shown when hovered over link
   data = data[, sentence := case_when(
-    # First Sankey (therapy and injection)
+    # 1. First Sankey (therapy and injection)
     # NL
     from == "therapie" & to == "doel <br> behaald" ~ paste0(weight, "% van de mensen die therapie hebben gekregen, heeft daarna hun doel behaald."),
     from == "therapie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die therapie hebben gekregen, heeft daarna hun doel niet behaald."),
@@ -34,7 +32,7 @@ create_sankey <- function(data, language, PMG) {
     from == "surgical <br> treatment" & to == "goal <br> obtained " ~ paste0(label, "% of people who received surgery after nonsurgical treatment, has obtained their goal."),
     from == "surgical <br> treatment" & to == "goal not <br> obtained " ~ paste0(label, "% people who received surgery after nonsurgical treatment, did not obtain their goal."),
 
-    # Second Sankey (only injection)
+    # 2. Second Sankey (only injection)
     # NL
     from == "injectie" & to == "doel <br> behaald" ~ paste0(weight, "% van de mensen die een injectie hebben gekregen, heeft daarna hun doel behaald."),
     from == "injectie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die een injectie hebben gekregen, heeft daarna hun doel niet behaald."),
@@ -42,7 +40,7 @@ create_sankey <- function(data, language, PMG) {
     from == "injection" & to == "goal <br> obtained" ~ paste0(weight, "% of people who have received an injection, has obtained their goal."),
     from == "injection" & to == "goal not <br> obtained" ~ paste0(weight, "% of people who have received an injection, did not obtain their goal."),
 
-    # Third Sankey (surgery)
+    # 3. Third Sankey (surgery)
     # NL
     from == "operatie" & to == "doel <br> behaald" ~ paste0(weight, "% van de mensen die een operatie hebben gekregen, heeft daarna hun doel behaald."),
     from == "operatie" & to == "doel niet <br> behaald" ~ paste0(weight, "% van de mensen die een operatie hebben gekregen, heeft daarna hun doel niet behaald."),
@@ -66,6 +64,11 @@ create_sankey <- function(data, language, PMG) {
                 sentence := paste0(sentence, " Percentage based on the total mean of all patients, because the sample size of patients with the same PMG is too small.")]
   }
 
+  # Values displayed on nodes
+  from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
+  to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
+
+  # Create sankey plot
   sankey_plot <- hchart(data,
               type = "sankey",
               hcaes(from = from, to = to, weight = weight),
@@ -91,7 +94,7 @@ create_sankey <- function(data, language, PMG) {
                                 allowOverlap = TRUE)
               ) %>%
     hc_tooltip(headerFormat = "",
-               pointFormat = paste0('<span style = "color: white; font-size: 16px">', "{point.sentence}", '</span>'),
+               pointFormat = paste0('<span style = "color: white; font-size: 16px">', "{point.sentence}", "</span>"),
                backgroundColor = "#4876b3",
                borderColor = "black",
                nodeFormat = "{point.name}")
