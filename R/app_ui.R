@@ -23,6 +23,7 @@ app_ui <- function(request) {
       page_sidebar(
         title = "Veni Modellen",
         sidebar = sidebar(
+          width = 300,
           title = "Model input",
           p(i18n$t("Op dit moment worden de gegevens getoond voor patientnummer xxx")),
           hr(style = "color: grey"),
@@ -31,25 +32,85 @@ app_ui <- function(request) {
                         label = i18n$t("Therapie"),
                         value = TRUE
           ),
+          checkboxInput(inputId = "show_injectie",
+                        label = i18n$t("Injectie"),
+                        value = TRUE
+          ),
           checkboxInput(inputId = "show_operatie",
                         label = i18n$t("Operatie"),
                         value = TRUE
           ),
           hr(style = "color: grey"),
+          selectizeInput(inputId = "diagnose_in",
+                         label = i18n$t("Diagnose"),
+                         choices = NULL,
+                         selected = NULL
+          ),
+          selectizeInput(inputId = "track_in",
+                         label = i18n$t("Meettraject"),
+                         choices = NULL,
+                         selected = NULL
+          ),
+          selectizeInput(inputId = "track_type_in",
+                         label = i18n$t("Meettraject type"),
+                         choices = NULL,
+                         selected = NULL
+          ),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
-                         choices = c(seq(18, 90, by = 1)),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "weight_in",
-                         label = i18n$t("Gewicht"),
-                         choices = c(seq(40, 200, by = 1)),
+                         label = i18n$t("Gewicht (in kg)"),
+                         choices = NULL,
                          selected = NULL
           ),
           selectizeInput(inputId = "duration_in",
                          label = i18n$t("Duur klachten (maanden)"),
-                         choices = c(seq(1, 12, by = 1)),
+                         choices = NULL,
                          selected = NULL
+          ),
+          selectizeInput(inputId = "height_in",
+                         label = i18n$t("Lengte (in cm)"),
+                         choices = NULL,
+                         selected = NULL
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "nrspainload_score_in",
+                           label = i18n$t("NRS pijn bij belasting score"),
+                           choices = NULL,
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_nrspainload_score")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "nrsfunction_score_in",
+                           label = i18n$t("NRS functie score"),
+                           choices = NULL,
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_nrsfunction_score")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "ipqconcern_SQ001_in",
+                           label = i18n$t("IPQ item Concern"),
+                           choices = NULL,
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_ipqconcern_SQ001")
+          ),
+          div(
+            style = "display: flex",
+            selectizeInput(inputId = "ipqemotionalresponse_SQ001_in",
+                           label = i18n$t("IPQ item Emotional Response"),
+                           choices = NULL,
+                           selected = NULL
+            ),
+            div(icon("pen"), id = "edit_icon_ipqemotionalresponse_SQ001")
           ),
           hr(style = "color: grey")
         ),
@@ -74,7 +135,7 @@ app_ui <- function(request) {
             card_body(
               class = "slider-card align-items-center",
               selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Kies een domein:"),
+                             label = i18n$t("Primaire doel:"),
                              choices = NULL
                              ),
               layout_column_wrap(
@@ -99,15 +160,37 @@ app_ui <- function(request) {
                   img(id = "happy-smiley-right", src = "www/happy-smiley.webp", height = 25, width = 25, class = "hide")
                 )
               ),
-              textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text")
+              textOutput("MPG_text") %>% tagAppendAttributes(class = "MPG_text"),
+              hidden(
+                actionButton(inputId = "reset_negative_goal_btn",
+                             label = i18n$t("Reset waarden")
+                             )
+              )
             )
           )
         ),
         card(
-          card_header("Sankey plot"),
+          class = "sankey_therapie",
+          card_header(i18n$t("Sankey therapie (en injectie)")),
           card_body(
-            fullscreen_this(highchartOutput("sankey_therapie")),
-            hr(id = "divider", style = "color: grey"),
+            checkboxInput(inputId = "injection_in",
+                          label = i18n$t("Injectie"),
+                          value = FALSE
+            ),
+            fullscreen_this(highchartOutput("sankey_therapie"))
+          )
+        ),
+        card(
+          class = "sankey_injectie",
+          card_header("Sankey injectie"),
+          card_body(
+            fullscreen_this(highchartOutput("sankey_injectie"))
+          )
+        ),
+        card(
+          class = "sankey_operatie",
+          card_header("Sankey operatie"),
+          card_body(
             fullscreen_this(highchartOutput("sankey_operatie", width = "59%"))
           )
         )
