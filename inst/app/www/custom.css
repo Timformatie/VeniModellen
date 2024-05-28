@@ -1,6 +1,9 @@
 :root {
   --red: rgb(210, 67, 66);
   --green: rgb(105, 172, 60);
+  --darkblue:  #4876b3;
+  --lightblue: #4876b370;
+  --greyblue: #cbd4e4;
 }
 
 .bslib-sidebar-layout>.sidebar .shiny-input-container {
@@ -12,8 +15,33 @@
     margin-left: 10px;
 }
 
+.info_box_div {
+  display: flex;
+  background-color: var(--darkblue);
+  border-radius: 5px;
+  align-items: center;
+  margin-right: 20px;
+  height: 75%;
+  align-self: center;
+  padding: 20px;
+}
+
+.info-icon {
+    margin-top: 0px;
+    margin-right: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+.info-text {
+  margin: 0;
+  padding: 5px 15px 5px 0px;
+  font-weight: bold;
+  color: white;
+}
+
 .slider-card {
-  background-color: #4876b370;
+  background-color: var(--lightblue);
 }
 
 .irs--shiny .irs-bar, .irs--shiny .irs-handle, .irs--shiny .irs-line,
@@ -97,21 +125,26 @@
 }
 
 .bslib-sidebar-layout>.sidebar {
-  background-color: #cbd4e4;
+  background-color: var(--greyblue);
 }
 
 .container-fluid {
   padding-left: 0px;
 }
 
-.bslib-page-title {
-  background-color: #4876b3;
+.navbar {
+  background-color: var(--darkblue);
+}
+
+.dashboard-title {
   color: white;
   letter-spacing: 0.2rem;
+  margin: 10px;
+  font-size: 1.2rem;
 }
 
 .smiley-left {
-  text-align: end;
+  text-align: end!important;
 }
 
 .hide {
@@ -127,6 +160,15 @@
   fill: none;
 }
 
+text {
+    display: block !important;
+}
+
+text::first-letter {
+    text-transform: capitalize !important;
+}
+
+
 .selectize-dropdown-content {
   height: 150px;
 }
@@ -136,3 +178,12 @@
   color: white;
   border: none;
 }
+
+.modal_dialog {
+  background-color: var(--greyblue);
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
