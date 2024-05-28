@@ -21,15 +21,15 @@ app_ui <- function(request) {
     waiterShowOnLoad(html = spin_three_bounce(), color = "#4876b3"),   # show loading screen while app is getting ready
     page_fluid(
       page_sidebar(
-        title = "Veni Modellen",
+        title = span(i18n$t("Gepersonaliseerd beslismodel behalen persoonlijke doelen (Personal Meaningful Gain)"), class = "dashboard-title"),
         sidebar = sidebar(
           width = 300,
           title = "Model input",
           p(i18n$t("Op dit moment worden de gegevens getoond voor patientnummer xxx")),
-          hr(style = "color: grey"),
+          hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           p(i18n$t("Toon uitkomsten voor:")),
           checkboxInput(inputId = "show_therapie",
-                        label = i18n$t("Therapie"),
+                        label = i18n$t("Handtherapie"),
                         value = TRUE
           ),
           checkboxInput(inputId = "show_injectie",
@@ -40,7 +40,7 @@ app_ui <- function(request) {
                         label = i18n$t("Operatie"),
                         value = TRUE
           ),
-          hr(style = "color: grey"),
+          hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           selectizeInput(inputId = "diagnose_in",
                          label = i18n$t("Diagnose"),
                          choices = NULL,
@@ -115,7 +115,14 @@ app_ui <- function(request) {
           hr(style = "color: grey")
         ),
         div(
-          style = "display: flex; justify-content:flex-end;",
+          style = "display: flex; justify-content:space-between;",
+          div(
+            class = "info_box_div",
+            icon("circle-info", class = "info-icon"),
+            p(class = "info-text",
+              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden.")
+            )
+          ),
           radioButtons(
             inputId = "language_in",
             label = "",
@@ -135,7 +142,7 @@ app_ui <- function(request) {
             card_body(
               class = "slider-card align-items-center",
               selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Primaire doel:"),
+                             label = i18n$t("Kies een primair doel:"),
                              choices = NULL
                              ),
               layout_column_wrap(
@@ -229,7 +236,7 @@ golem_add_external_resources <- function() {
     favicon(ext = 'png'),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "Veni modellen"
+      app_title = "Personalized decision model personal goals (Personal Meaningful Gain)"
     ),
     tags$head(
       tags$link(
