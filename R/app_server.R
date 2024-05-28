@@ -183,6 +183,19 @@ app_server <- function(input, output, session) {
 
   })
 
+  # Determine if checkbox for handtherapy should be checked or not
+  observeEvent(input$diagnose_in, {
+    if (input$diagnose_in == "Dupuytren fingers") {
+      updateCheckboxInput(inputId = "show_therapie",
+                          value = FALSE
+      )
+    } else {
+      updateCheckboxInput(inputId = "show_therapie",
+                          value = TRUE
+      )
+    }
+  })
+
   # Get current and goal values for selected domain and update slider
   observe({
     current_val <- isolate(v$dt_input$PrimPSN_Int)
