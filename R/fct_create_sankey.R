@@ -10,6 +10,7 @@
 #'
 #' @import highcharter
 #' @import dplyr
+#' @importFrom stringr str_to_sentence
 #'
 #' @noRd
 create_sankey <- function(data, language, PMG) {
@@ -66,7 +67,13 @@ create_sankey <- function(data, language, PMG) {
 
   # Values displayed on nodes
   from_values <- if (language == "nl") from_therapie_nl else from_therapie_en
+  from_values = str_to_sentence(from_values)
   to_values <- if (language == "nl") to_therapie_nl else to_therapie_en
+  to_values = str_to_sentence(to_values)
+
+  # Transform text in nodes to first letter uppercase
+  data = data[, from := str_to_sentence(from)]
+  data = data[, to := str_to_sentence(to)]
 
   # Create sankey plot
   sankey_plot <- hchart(data,
@@ -74,7 +81,8 @@ create_sankey <- function(data, language, PMG) {
               hcaes(from = from, to = to, weight = weight),
               name = "Basic Sankey Diagram",
               nodes = list(list(id = from_values[1], color = color_list$grey),
-                           list(id = "injectie", color = color_list$grey),
+                           list(id = "Injectie", color = color_list$grey),
+                           list(id = "Injection", color = color_list$grey),
                            list(id = to_values[1], color = color_list$green),
                            list(id = to_values[2], color = color_list$red),
                            list(id = to_values[3], color = color_list$grey),
