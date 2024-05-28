@@ -18,12 +18,16 @@ create_modal <- function(input_var, dt_input, i18n) {
   showModal(
     modalDialog(
       title = i18n()$t("Vul vraag in"),
-      i18n()$t(question_text),
-      hr(style = "color: grey"),
-      selectizeInput(inputId = input_id,
-                     label = i18n()$t(label),
-                     choices = c(seq(1, 10, by = 1)),
-                     selected = dt_input[[input_var]]
+      div(
+        style = "background-color: #cbd4e4; padding: 15px; border-radius: 5px",
+        i18n()$t(question_text),
+        hr(style = "color: grey"),
+        sliderInput(inputId = input_id,
+                    label = i18n()$t(label),
+                    min = 0,
+                    max = 10,
+                    value = dt_input[[input_var]]
+        )
       ),
       size = "m",
       footer = tagList(
