@@ -11,7 +11,7 @@
 #' @importFrom data.table data.table
 #'
 #' @noRd
-create_plot_datatable <- function(dt_pred, language, treatment_type, PMG) {
+create_plot_datatable <- function(dt_pred, language, treatment_type, PMG, show_operation_results = TRUE) {
 
   # Determine probabilities patient will continue with surgery
   x_continue_surgery <- round(dt_continue_surgery[variable == PMG, X] * 100)
@@ -45,6 +45,11 @@ create_plot_datatable <- function(dt_pred, language, treatment_type, PMG) {
     weight = weight_values,
     label = weight_values
   )
+
+  # Modify dt_results when user only wants therapy results shown (without surgery results)
+  if (show_operation_results == FALSE) {
+    dt_results = dt_results[1:2]
+  }
 
   # Alter weights to show sankey plot correctly
   if (nrow(dt_results)>2) {

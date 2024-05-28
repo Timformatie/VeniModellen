@@ -401,9 +401,13 @@ app_server <- function(input, output, session) {
   ## data for plot ----
   dt_results_therapie_operatie <- reactive({
     dt_pred <- dt_pred_therapie_operatie()
+    show_operation_results <- input$show_operation_results_in
+
     dt_sankey_therapie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in,
                                                 treatment_type = "therapie",
-                                                PMG = PMG_val())
+                                                PMG = PMG_val(),
+                                                show_operation_results = show_operation_results
+                                                )
     return(dt_sankey_therapie)
   })
 

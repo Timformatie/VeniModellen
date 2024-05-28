@@ -173,9 +173,21 @@ app_ui <- function(request) {
           class = "sankey_therapie",
           card_header(i18n$t("Handtherapie (optioneel met injectie)")),
           card_body(
-            checkboxInput(inputId = "injection_in",
-                          label = i18n$t("Injectie"),
-                          value = FALSE
+            fluidRow(
+              column(
+                width = 1,
+                checkboxInput(inputId = "injection_in",
+                              label = i18n$t("+ Injectie"),
+                              value = FALSE
+                )
+              ),
+              column(
+                width = 3,
+                checkboxInput(inputId = "show_operation_results_in",
+                              label = i18n$t("Toon resultaten voor operatie"),
+                              value = TRUE
+                )
+              )
             ),
             fullscreen_this(highchartOutput("sankey_therapie"))
           )
