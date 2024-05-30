@@ -120,7 +120,7 @@ app_ui <- function(request) {
             class = "info_box_div",
             icon("circle-info", class = "info-icon"),
             p(class = "info-text",
-              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden.")
+              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden. Voor sommige behandelingen geldt dat dit nog geen eindresultaat is.")
             )
           ),
           radioButtons(
