@@ -57,25 +57,36 @@ app_server <- function(input, output, session) {
 
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
-  observeEvent(url_value, {
+  observeEvent(session$clientData$url_search, {
+
+    # Extract query parameters from url
+    params <- parseQueryString(URLdecode(session$clientData$url_search))
+    params <- lapply(params, as.numeric)
 
     dt <- isolate(v$dt_input)
 
     #TODO: determine correct diagnosis (and other values) from URL
     dt <- dt[, Diagnose := "Trigger"]
-    dt <- dt[, Track := dt_diagnosis_track[Diagnose_dt_train == isolate(v$dt_input$Diagnose), Track]]
-    dt <- dt[, Track_type := dt_diagnosis_track[Diagnose_dt_train == isolate(v$dt_input$Diagnose), `Track Type`]]
-    dt <- dt[, Age := as.numeric(40)]
-    dt <- dt[, weight := 85]
-    dt <- dt[, howLongComplaints := 8]
-    dt <- dt[, height := 178]
-    dt <- dt[, nrspainload_score := 6]
-    dt <- dt[, nrsfunction_score := 4]
-    dt <- dt[, ipqconcern_SQ001 := 2]
-    dt <- dt[, ipqemotionalresponse_SQ001 := 4]
-    dt <- dt[, PrimaryGoal.x := "pijn"] # This input is above the slider input ("primaire doel domein")
-    dt <- dt[, PrimPSN_Int := 7]
-    dt <- dt[, PrimPSN_Satisf := 4]
+    dt <- dt[, Track := dt_diagnosis_track[
+      Diagnose_dt_train == isolate(v$dt_input$Diagnose), Track]
+    ]
+    dt <- dt[
+      , Track_type := dt_diagnosis_track[
+        Diagnose_dt_train == isolate(v$dt_input$Diagnose), `Track Type`
+      ]
+    ]
+    dt <- dt[, Age := params$age]
+    dt <- dt[, weight := params$weight]
+    dt <- dt[, howLongComplaints := params$complaints]
+    dt <- dt[, height := params$height]
+    dt <- dt[, nrspainload_score := params$nrspainload]
+    dt <- dt[, nrsfunction_score := params$nrsfunction]
+    dt <- dt[, ipqconcern_SQ001 := params$ipqconcern]
+    dt <- dt[, ipqemotionalresponse_SQ001 := params$ipqemotionalresponse]
+    # This input is above the slider input ("primaire doel domein")
+    dt <- dt[, PrimaryGoal.x := recode_primary_goal(params$primarygoal)]
+    dt <- dt[, PrimPSN_Int := params$primpsnint]
+    dt <- dt[, PrimPSN_Satisf := params$primpsnsatisf]
 
   })
 
