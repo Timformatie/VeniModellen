@@ -35,37 +35,40 @@ app_server <- function(input, output, session) {
   update_slider <- reactiveVal(NULL)
 
   # Initialiseer datatable with input values ----
-  v <- reactiveValues(dt_input = data.table(Behandeling_clustered = NULL,
-                                            Diagnose = NULL,
-                                            Track = NULL,
-                                            Track_type = NULL,
-                                            Age = NULL,
-                                            weight = NULL,
-                                            height = NULL,
-                                            howLongComplaints = NULL,
-                                            nrsfunction_score = NULL,
-                                            nrspainload_score = NULL,
-                                            ipqconcern_SQ001 = NULL,
-                                            ipqemotionalresponse_SQ001 = NULL,
-                                            PrimaryGoal.x = NULL,
-                                            PrimPSN_Int = NULL,
-                                            PrimPSN_Satisf = NULL
-                                            ))
-
-
-
+  v <- reactiveValues(
+    input = list(
+      Behandeling_clustered = NULL,
+      Diagnose = NULL,
+      Track = NULL,
+      Track_type = NULL,
+      Age = NULL,
+      weight = NULL,
+      height = NULL,
+      howLongComplaints = NULL,
+      nrsfunction_score = NULL,
+      nrspainload_score = NULL,
+      ipqconcern_SQ001 = NULL,
+      ipqemotionalresponse_SQ001 = NULL,
+      PrimaryGoal.x = NULL,
+      PrimPSN_Int = NULL,
+      PrimPSN_Satisf = NULL
+    )
+  )
 
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
   observeEvent(session$clientData$url_search, {
+    req(session$clientData$url_search != "")
 
     # Extract query parameters from url
     params <- parseQueryString(URLdecode(session$clientData$url_search))
     params <- lapply(params, as.numeric)
 
     dt <- isolate(v$dt_input)
+    # browser()
+    # TODO: option to choose values in case of nulls
 
-    #TODO: determine correct diagnosis (and other values) from URL
+    # Use url parameters to set input values
     dt <- dt[, Diagnose := "Trigger"]
     dt <- dt[, Track := dt_diagnosis_track[
       Diagnose_dt_train == isolate(v$dt_input$Diagnose), Track]
@@ -101,7 +104,7 @@ app_server <- function(input, output, session) {
                                             c(i18n()$t("Carpaal Tunnel Syndroom"),i18n()$t("CMC-1 artrose")
                                               ,i18n()$t("M. Dupuytren"), i18n()$t("M. De Quervain")
                                               ,i18n()$t("TFCC letsel"),i18n()$t("Trigger finger"))),
-                         selected = isolate(v$dt_input$Diagnose)
+                         selected = isolate(v$input$Diagnose)
     )
 
     updateSelectizeInput(session = session,
@@ -109,73 +112,73 @@ app_server <- function(input, output, session) {
                          choices = setNames(c("Duim", "Vinger", "Pols", "Zenuw"),
                                             c(i18n()$t("Duim"),i18n()$t("Vinger"),i18n()$t("Pols")
                                               ,i18n()$t("Zenuw"))),
-                         selected = isolate(v$dt_input$Track)
+                         selected = isolate(v$input$Track)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "track_type_in",
                          choices = unique(dt_diagnosis_track$`Track Type`),
-                         selected = isolate(v$dt_input$Track_type)
+                         selected = isolate(v$input$Track_type)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "age_in",
                          choices = c(seq(16, 120, by = 1)),
-                         selected = isolate(v$dt_input$Age)
+                         selected = isolate(v$input$Age)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "weight_in",
                          choices = c(seq(30, 200, by = 1)),
-                         selected = isolate(v$dt_input$weight)
+                         selected = isolate(v$input$weight)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "duration_in",
                          choices = c(seq(0, 1080, by = 1)),
-                         selected = isolate(v$dt_input$howLongComplaints)
+                         selected = isolate(v$input$howLongComplaints)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "height_in",
                          choices = c(seq(100, 230, by = 1)),
-                         selected = isolate(v$dt_input$height)
+                         selected = isolate(v$input$height)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "ipqconcern_SQ001_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$ipqconcern_SQ001)
+                         selected = isolate(v$input$ipqconcern_SQ001)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "nrspainload_score_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$nrspainload_score)
+                         selected = isolate(v$input$nrspainload_score)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "nrsfunction_score_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$nrsfunction_score)
+                         selected = isolate(v$input$nrsfunction_score)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "ipqemotionalresponse_SQ001_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$ipqemotionalresponse_SQ001)
+                         selected = isolate(v$input$ipqemotionalresponse_SQ001)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "primPSN_int_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$PrimPSN_Int)
+                         selected = isolate(v$input$PrimPSN_Int)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "primPSN_satisf_in",
                          choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$dt_input$PrimPSN_Satisf)
+                         selected = isolate(v$input$PrimPSN_Satisf)
     )
 
     updateSelectizeInput(session = session,
@@ -188,7 +191,7 @@ app_server <- function(input, output, session) {
                                               ,i18n()$t("Kracht"), i18n()$t("Activiteiten uitvoeren")
                                               ,i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk")
                                               ,i18n()$t("Werk uitvoeren"))),
-                         selected = isolate(v$dt_input$PrimaryGoal.x)
+                         selected = isolate(v$input$PrimaryGoal.x)
                          )
 
 
@@ -196,6 +199,7 @@ app_server <- function(input, output, session) {
 
   # Determine if checkbox for handtherapy should be checked or not
   observeEvent(input$diagnose_in, {
+    req(input$diagnose_in)
     if (input$diagnose_in == "Dupuytren fingers") {
       updateCheckboxInput(inputId = "show_therapie",
                           value = FALSE
@@ -209,8 +213,11 @@ app_server <- function(input, output, session) {
 
   # Get current and goal values for selected domain and update slider
   observe({
-    current_val <- isolate(v$dt_input$PrimPSN_Int)
-    goal_val <- isolate(v$dt_input$PrimPSN_Satisf)
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
+
+    current_val <- isolate(v$input$PrimPSN_Int)
+    goal_val <- isolate(v$input$PrimPSN_Satisf)
     range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
     updateSliderInput(session = session,
                       inputId = "pmg_slider",
@@ -222,13 +229,15 @@ app_server <- function(input, output, session) {
   # Update slider layout when domain input changes
   observeEvent(input$domain_in, {
     req(!input$domain_in == "")
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
 
     # Update selected domain reactiveVal
     selected_domain(input$domain_in)
-    v$dt_input$PrimaryGoal.x <- selected_domain()
+    v$input$PrimaryGoal.x <- selected_domain()
 
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
+    current_val <- v$input$PrimPSN_Int
+    goal_val <- v$input$PrimPSN_Satisf
     goal <- selected_domain()
     negative_goal(FALSE)
     if (goal %in% reverse_domains & (goal_val < current_val)) {
@@ -245,8 +254,9 @@ app_server <- function(input, output, session) {
 
   # Determine if button for resetting goal values should be shown
   observeEvent(negative_goal(), {
+    browser()
     if (negative_goal()) {
-      show(id = "reset_negative_goal_btn")
+      shinyjs::show(id = "reset_negative_goal_btn")
     } else {
       hide(id = "reset_negative_goal_btn")
     }
@@ -257,9 +267,11 @@ app_server <- function(input, output, session) {
   # Change text according to domain and slider values
   output$MPG_text <- renderText({
     req(!selected_domain() == "")
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
 
-    current_val <- v$dt_input$PrimPSN_Int
-    goal_val <- v$dt_input$PrimPSN_Satisf
+    current_val <- v$input$PrimPSN_Int
+    goal_val <- v$input$PrimPSN_Satisf
 
     selected_domain <- tolower(i18n()$t(input$domain_in))
 
@@ -272,7 +284,7 @@ app_server <- function(input, output, session) {
       } else {
         text <- str_glue("Your current score for {selected_domain} is {current_val}. Your goal is a score of {goal_val}.")
       }
-      removeClass(selector = ".MPG_text", class = "rood_text")
+      shinyjs::removeClass(selector = ".MPG_text", class = "rood_text")
     }
 
     return(text)
@@ -282,15 +294,17 @@ app_server <- function(input, output, session) {
 
   # Reset goal values
   observeEvent(input$reset_negative_goal_btn, {
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
     negative_goal(FALSE)
 
-    current_val <- v$dt_input$PrimPSN_Int
+    current_val <- v$input$PrimPSN_Int
     if (selected_domain() %in% reverse_domains) {
-      v$dt_input$PrimPSN_Satisf <- current_val + 1
+      v$input$PrimPSN_Satisf <- current_val + 1
     } else {
-      v$dt_input$PrimPSN_Satisf <- current_val - 1
+      v$input$PrimPSN_Satisf <- current_val - 1
     }
-    goal_val <- v$dt_input$PrimPSN_Satisf
+    goal_val <- v$input$PrimPSN_Satisf
 
     range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
 
@@ -306,6 +320,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$pmg_slider, {
     req(!input$domain_in == "")
     req((!negative_goal()))
+    browser()
 
     if (selected_domain() %in% reverse_domains) {
       current_val <- min(input$pmg_slider)
@@ -315,66 +330,76 @@ app_server <- function(input, output, session) {
       goal_val <- min(input$pmg_slider)
     }
 
-    v$dt_input$PrimPSN_Int <- current_val
-    v$dt_input$PrimPSN_Satisf <- goal_val
+    v$input$PrimPSN_Int <- current_val
+    v$input$PrimPSN_Satisf <- goal_val
 
     update_slider_layout(selected_domain(), current_val, goal_val)
 
   }, ignoreInit = TRUE)
 
   observeEvent(input$age_in, {
-    v$dt_input[["Age"]] <- as.numeric(input$age_in)
+    req(input$age_in)
+    v$input[["Age"]] <- as.numeric(input$age_in)
   })
 
   observeEvent(input$weight_in, {
-    v$dt_input[["weight"]] <- as.numeric(input$weight_in)
+    req(input$weight_in)
+    v$input[["weight"]] <- as.numeric(input$weight_in)
   })
 
   observeEvent(input$duration_in, {
-    v$dt_input[["howLongComplaints"]] <- as.numeric(input$duration_in)
+    req(input$duration_in)
+    v$input[["howLongComplaints"]] <- as.numeric(input$duration_in)
       })
 
   observeEvent(input$diagnose_in, {
     req(!input$diagnose_in == "")
-    v$dt_input[["Diagnose"]] <- input$diagnose_in
-    v$dt_input[["Track"]] <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Track]
-    v$dt_input[["Track_type"]] <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, `Track Type`]
+    v$input[["Diagnose"]] <- input$diagnose_in
+    v$input[["Track"]] <- dt_diagnosis_track[Diagnose_dt_train == v$input$Diagnose, Track]
+    v$input[["Track_type"]] <- dt_diagnosis_track[Diagnose_dt_train == v$input$Diagnose, `Track Type`]
 
     updateSelectizeInput(session = session,
                          inputId = "track_in",
-                         selected = isolate(v$dt_input$Track)
+                         selected = isolate(v$input$Track)
     )
 
     updateSelectizeInput(session = session,
                          inputId = "track_type_in",
-                         selected = isolate(v$dt_input$Track_type)
+                         selected = isolate(v$input$Track_type)
     )
 
   })
 
   observeEvent(input$ipqemotionalresponse_SQ001_in, {
-    v$dt_input[["ipqemotionalresponse_SQ001"]] <- as.numeric(input$ipqemotionalresponse_SQ001_in)
+    req(input$ipqemotionalresponse_SQ001_in)
+    v$input[["ipqemotionalresponse_SQ001"]] <- as.numeric(input$ipqemotionalresponse_SQ001_in)
   })
 
   observeEvent(input$ipqconcern_SQ001_in, {
-    v$dt_input[["ipqconcern_SQ001"]] <- as.numeric(input$ipqconcern_SQ001_in)
+    req(input$ipqconcern_SQ001_in)
+    v$input[["ipqconcern_SQ001"]] <- as.numeric(input$ipqconcern_SQ001_in)
   })
 
   observeEvent(input$nrspainload_score_in, {
-    v$dt_input[["nrspainload_score"]] <- as.numeric(input$nrspainload_score_in)
+    req(input$nrspainload_score_in)
+    v$input[["nrspainload_score"]] <- as.numeric(input$nrspainload_score_in)
   })
 
   observeEvent(input$nrsfunction_score_in, {
-    v$dt_input[["nrsfunction_score"]] <- as.numeric(input$nrsfunction_score_in)
+    req(input$nrsfunction_score_in)
+    v$input[["nrsfunction_score"]] <- as.numeric(input$nrsfunction_score_in)
   })
 
   observeEvent(input$height_in, {
-    v$dt_input[["height"]] <- as.numeric(input$height_in)
+    req(input$height_in)
+    v$input[["height"]] <- as.numeric(input$height_in)
   })
 
   # Calculate PMG
   PMG_val <- reactive({
-    PMG <- abs(as.numeric(v$dt_input$PrimPSN_Satisf) - as.numeric(v$dt_input$PrimPSN_Int))
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
+    PMG <- abs(as.numeric(v$input$PrimPSN_Satisf) - as.numeric(v$input$PrimPSN_Int))
     return(PMG)
   })
 
@@ -382,6 +407,7 @@ app_server <- function(input, output, session) {
   ## predictions ----
   dt_pred_therapie_operatie <- reactive({
     req(!is.null(selected_domain()))
+    req(!any(sapply(v$input, is.null)))
 
     # Goal should be positive, otherwise don't show predictions
     validate(
@@ -389,13 +415,14 @@ app_server <- function(input, output, session) {
     )
 
     # Get input data
-    dt_input <- v$dt_input
+
+    dt_input <- as.data.table(v$input)
 
     # Transform goal from dutch to english
     dt_input$PrimaryGoal.x <- transform_goal_to_english(dt_input$PrimaryGoal.x)
 
     # Injection checkbox determines treatment input
-    if (input$injection_in == FALSE) {
+    if (!input$injection_in) {
       dt_input$Behandeling_clustered <- "Hand therapy ± orthosis"
     } else {
       dt_input$Behandeling_clustered <- "Hand therapy ± orthosis + injection"
@@ -411,7 +438,7 @@ app_server <- function(input, output, session) {
     pred_therapie <- predict(model, dt_input, type = "prob")
 
     # Change treatment to surgery according to diagnosis for second part of Sankey
-    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Behandeling]
+    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$input$Diagnose, Behandeling]
 
     # Predict probs for surgery
     pred_therapie_operatie <- predict(model, dt_input, type = "prob")
@@ -440,6 +467,7 @@ app_server <- function(input, output, session) {
   ## predictions ----
   dt_pred_injectie <- reactive({
     req(!is.null(selected_domain()))
+    req(!any(sapply(v$input, is.null)))
 
     # Goal should be positive
     validate(
@@ -447,7 +475,7 @@ app_server <- function(input, output, session) {
     )
 
     # Get input data
-    dt_input <- v$dt_input
+    dt_input <- as.data.table(v$input)
 
     # Transform goal from dutch to english
     dt_input$PrimaryGoal.x <- transform_goal_to_english(dt_input$PrimaryGoal.x)
@@ -464,7 +492,7 @@ app_server <- function(input, output, session) {
     pred_injectie <- predict(model, dt_input, type = "prob")
 
     # Change treatment to surgery according to diagnosis for second part of Sankey
-    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Behandeling]
+    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$input$Diagnose, Behandeling]
     # Predict probs for surgery
     pred_injectie_operatie <- predict(model, dt_input, type = "prob")
 
@@ -487,6 +515,7 @@ app_server <- function(input, output, session) {
   ## predictions ----
   dt_pred_operatie <- reactive({
     req(!is.null(selected_domain()))
+    req(!any(sapply(v$input, is.null)))
 
     # Goal should be positive
     validate(
@@ -494,13 +523,13 @@ app_server <- function(input, output, session) {
     )
 
     # Get input data
-    dt_input <- v$dt_input
+    dt_input <- as.data.table(v$input)
 
     # Transform goal from dutch to english
     dt_input$PrimaryGoal.x <- transform_goal_to_english(dt_input$PrimaryGoal.x)
 
     # Determine treatment/surgery based on diagnosis
-    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$dt_input$Diagnose, Behandeling]
+    dt_input$Behandeling_clustered <- dt_diagnosis_track[Diagnose_dt_train == v$input$Diagnose, Behandeling]
 
     # When domain score lower is better (like pain), reverse variable scale
     if (!selected_domain() %in% reverse_domains) {
@@ -542,22 +571,25 @@ app_server <- function(input, output, session) {
 
   # Hide/show plots according to user input ----
   observeEvent(input$show_therapie, {
+    req(!is.null(input$show_therapie))
     if (input$show_therapie == TRUE) {
-      show(selector = "div.sankey_therapie")
+      shinyjs::show(selector = "div.sankey_therapie")
     } else {
       hide(selector = "div.sankey_therapie")
     }
   })
   observeEvent(input$show_injectie, {
+    req(!is.null(input$show_injectie))
     if (input$show_injectie == TRUE) {
-      show(selector = "div.sankey_injectie")
+      shinyjs::show(selector = "div.sankey_injectie")
     } else {
       hide(selector = "div.sankey_injectie")
     }
   })
   observeEvent(input$show_operatie, {
+    req(!is.null(input$show_operatie))
     if (input$show_operatie == TRUE) {
-      show(selector = "div.sankey_operatie")
+      shinyjs::show(selector = "div.sankey_operatie")
     } else {
       hide(selector = "div.sankey_operatie")
     }
@@ -568,19 +600,19 @@ app_server <- function(input, output, session) {
 
   # Open modal when user clicks pencil icon to modify question answer
   onclick("edit_icon_nrspainload_score", {
-    create_modal(input_var = "nrspainload_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "nrspainload_score", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("nrspainload_score")
     })
   onclick("edit_icon_nrsfunction_score", {
-    create_modal(input_var = "nrsfunction_score", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "nrsfunction_score", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("nrsfunction_score")
   })
   onclick("edit_icon_ipqconcern_SQ001", {
-    create_modal(input_var = "ipqconcern_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "ipqconcern_SQ001", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("ipqconcern_SQ001")
   })
   onclick("edit_icon_ipqemotionalresponse_SQ001", {
-    create_modal(input_var = "ipqemotionalresponse_SQ001", dt_input = v$dt_input, i18n = reactive(i18n()))
+    create_modal(input_var = "ipqemotionalresponse_SQ001", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("ipqemotionalresponse_SQ001")
   })
 
@@ -589,7 +621,7 @@ app_server <- function(input, output, session) {
     # determine variable to be modified
     modify_var <- edit_question()
     # modify variable in model input
-    v$dt_input[[modify_var]] <- as.numeric(input[[paste0(modify_var, "_modal_in")]])
+    v$input[[modify_var]] <- as.numeric(input[[paste0(modify_var, "_modal_in")]])
     # modify corresponding UI input
     updateSelectizeInput(session = session,
                          inputId = paste0(modify_var, "_in"),
