@@ -37,7 +37,7 @@ app_server <- function(input, output, session) {
   # Initialiseer datatable with input values ----
   v <- reactiveValues(
     input = list(
-      Behandeling_clustered = NULL,
+      # Behandeling_clustered = NULL,
       Diagnose = NULL,
       Track = NULL,
       Track_type = NULL,
@@ -64,32 +64,24 @@ app_server <- function(input, output, session) {
     params <- parseQueryString(URLdecode(session$clientData$url_search))
     params <- lapply(params, as.numeric)
 
-    dt <- isolate(v$dt_input)
-    # browser()
-    # TODO: option to choose values in case of nulls
-
-    # Use url parameters to set input values
-    dt <- dt[, Diagnose := "Trigger"]
-    dt <- dt[, Track := dt_diagnosis_track[
-      Diagnose_dt_train == isolate(v$dt_input$Diagnose), Track]
+    v$input$Diagnose <- "Trigger"
+    v$input$Track <- dt_diagnosis_track[
+      Diagnose_dt_train == v$input$Diagnose, Track
     ]
-    dt <- dt[
-      , Track_type := dt_diagnosis_track[
-        Diagnose_dt_train == isolate(v$dt_input$Diagnose), `Track Type`
-      ]
+    v$input$Track_type <- dt_diagnosis_track[
+      Diagnose_dt_train == v$input$Diagnose, `Track Type`
     ]
-    dt <- dt[, Age := params$age]
-    dt <- dt[, weight := params$weight]
-    dt <- dt[, howLongComplaints := params$complaints]
-    dt <- dt[, height := params$height]
-    dt <- dt[, nrspainload_score := params$nrspainload]
-    dt <- dt[, nrsfunction_score := params$nrsfunction]
-    dt <- dt[, ipqconcern_SQ001 := params$ipqconcern]
-    dt <- dt[, ipqemotionalresponse_SQ001 := params$ipqemotionalresponse]
-    # This input is above the slider input ("primaire doel domein")
-    dt <- dt[, PrimaryGoal.x := recode_primary_goal(params$primarygoal)]
-    dt <- dt[, PrimPSN_Int := params$primpsnint]
-    dt <- dt[, PrimPSN_Satisf := params$primpsnsatisf]
+    v$input$Age <- params$age
+    v$input$weight <- params$weight
+    v$input$howLongComplaints <- params$complaints
+    v$input$height <- params$height
+    v$input$nrspainload_score <- params$nrspainload
+    v$input$nrsfunction_score <- params$nrsfunction
+    v$input$ipqconcern_SQ001 <- params$ipqconcern
+    v$input$ipqemotionalresponse_SQ001 <- params$ipqemotionalresponse
+    v$input$PrimaryGoal.x <- recode_primary_goal(params$primarygoal)
+    v$input$PrimPSN_Int <- params$primpsnint
+    v$input$PrimPSN_Satisf <- params$primpsnsatisf
 
   })
 
@@ -254,7 +246,6 @@ app_server <- function(input, output, session) {
 
   # Determine if button for resetting goal values should be shown
   observeEvent(negative_goal(), {
-    browser()
     if (negative_goal()) {
       shinyjs::show(id = "reset_negative_goal_btn")
     } else {
@@ -320,7 +311,6 @@ app_server <- function(input, output, session) {
   observeEvent(input$pmg_slider, {
     req(!input$domain_in == "")
     req((!negative_goal()))
-    browser()
 
     if (selected_domain() %in% reverse_domains) {
       current_val <- min(input$pmg_slider)
