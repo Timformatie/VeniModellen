@@ -103,6 +103,11 @@ app_server <- function(input, output, session) {
     if (!is.null(params$primpsnsatisf)) {
       v$input$PrimPSN_Satisf <- params$primpsnsatisf
     }
+
+    # Show warning if any of the input values is empty
+    if (!any(sapply(v$input, is.null))) {
+      shinyjs::hide("warning_box")
+    }
   })
 
   # Initialize inputs with current values ----
@@ -315,8 +320,6 @@ app_server <- function(input, output, session) {
     }
 
     update_slider_layout(goal, current_val, goal_val)
-
-    # waiter_hide()
 
   }, ignoreInit = TRUE)
 

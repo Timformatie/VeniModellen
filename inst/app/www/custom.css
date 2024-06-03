@@ -26,6 +26,17 @@
   padding: 20px;
 }
 
+.warning_box_div {
+  display: flex;
+  background-color: var(--red);
+  border-radius: 5px;
+  align-items: center;
+  margin-right: 20px;
+  height: 75%;
+  align-self: center;
+  padding: 20px;
+}
+
 .info-icon {
     margin-top: 0px;
     margin-right: 10px;

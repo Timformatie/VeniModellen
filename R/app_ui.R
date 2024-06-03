@@ -134,6 +134,18 @@ app_ui <- function(request) {
             inline = TRUE
           )
         ),
+        div(
+          id = "warning_box",
+          style = "display: flex; justify-content:space-between;",
+          div(
+            class = "warning_box_div",
+            icon("circle-exclamation", class = "info-icon"),
+            p(
+              class = "info-text",
+              i18n$t("De predicties kunnen pas getoond worden als alle variabelen zijn ingevuld.")
+            )
+          )
+        ),
         layout_column_wrap(
           width = 1,
           card(
