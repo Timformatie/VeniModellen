@@ -31,6 +31,7 @@ app_server <- function(input, output, session) {
   # Initialiseer reactiveVal's
   selected_domain <- reactiveVal()
   negative_goal <- reactiveVal(NULL)
+  show_sidebar <- reactiveVal(TRUE)
 
   # Initialiseer datatable with input values ----
   v <- reactiveValues(
@@ -55,8 +56,6 @@ app_server <- function(input, output, session) {
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
   observeEvent(session$clientData$url_search, {
-    # req(session$clientData$url_search != "")
-
     # Extract query parameters from url
     params <- parseQueryString(URLdecode(session$clientData$url_search))
     params <- lapply(params, as.numeric)
@@ -107,6 +106,7 @@ app_server <- function(input, output, session) {
     # Show warning if any of the input values is empty
     if (!any(sapply(v$input, is.null))) {
       shinyjs::hide("warning_box")
+      sidebar_toggle("sidebar", open = FALSE)
     }
   })
 

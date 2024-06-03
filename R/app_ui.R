@@ -23,8 +23,10 @@ app_ui <- function(request) {
       page_sidebar(
         title = span(i18n$t("Gepersonaliseerd beslismodel behalen persoonlijke doelen (Personal Meaningful Gain)"), class = "dashboard-title"),
         sidebar = sidebar(
+          id = "sidebar",
           width = 300,
           title = "Model input",
+          open = TRUE,
           # hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           p(i18n$t("Toon uitkomsten voor:")),
           checkboxInput(inputId = "show_therapie",
