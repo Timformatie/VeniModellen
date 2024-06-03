@@ -25,8 +25,7 @@ app_ui <- function(request) {
         sidebar = sidebar(
           width = 300,
           title = "Model input",
-          p(i18n$t("Op dit moment worden de gegevens getoond voor patientnummer xxx")),
-          hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
+          # hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           p(i18n$t("Toon uitkomsten voor:")),
           checkboxInput(inputId = "show_therapie",
                         label = i18n$t("Handtherapie"),

@@ -3,7 +3,6 @@
   "languages": ["nl", "en"],
   "translation": [
     {"en": "Personalized decision model personal goals (Personal Meaningful Gain)", "nl": "Gepersonaliseerd beslismodel behalen persoonlijke doelen (Personal Meaningful Gain)"},
-    {"en": "Current data shown is for patient number xxx", "nl": "Op dit moment worden de gegevens getoond voor patientnummer xxx"},
     {"en": "Show results for:", "nl": "Toon uitkomsten voor:"},
     {"en": "The model is based on 5010 patients. All predictions are for outcomes after 3 months.", "nl": "Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden."},
     {"en": "Injection", "nl": "Injectie"},
