@@ -31,13 +31,10 @@ app_server <- function(input, output, session) {
   # Initialiseer reactiveVal's
   selected_domain <- reactiveVal()
   negative_goal <- reactiveVal(NULL)
-  url_value <- reactiveVal(NULL)
-  update_slider <- reactiveVal(NULL)
 
   # Initialiseer datatable with input values ----
   v <- reactiveValues(
     input = list(
-      # Behandeling_clustered = NULL,
       Diagnose = NULL,
       Track = NULL,
       Track_type = NULL,
@@ -58,7 +55,7 @@ app_server <- function(input, output, session) {
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
   observeEvent(session$clientData$url_search, {
-    req(session$clientData$url_search != "")
+    # req(session$clientData$url_search != "")
 
     # Extract query parameters from url
     params <- parseQueryString(URLdecode(session$clientData$url_search))
@@ -71,122 +68,201 @@ app_server <- function(input, output, session) {
     v$input$Track_type <- dt_diagnosis_track[
       Diagnose_dt_train == v$input$Diagnose, `Track Type`
     ]
-    v$input$Age <- params$age
-    v$input$weight <- params$weight
-    v$input$howLongComplaints <- params$complaints
-    v$input$height <- params$height
-    v$input$nrspainload_score <- params$nrspainload
-    v$input$nrsfunction_score <- params$nrsfunction
-    v$input$ipqconcern_SQ001 <- params$ipqconcern
-    v$input$ipqemotionalresponse_SQ001 <- params$ipqemotionalresponse
-    v$input$PrimaryGoal.x <- recode_primary_goal(params$primarygoal)
-    v$input$PrimPSN_Int <- params$primpsnint
-    v$input$PrimPSN_Satisf <- params$primpsnsatisf
 
+    # Update url based values
+    if (!is.null(params$age)) {
+      v$input$Age <- params$age
+    }
+    if (!is.null(params$weight)) {
+      v$input$weight <- params$weight
+    }
+    if (!is.null(params$complaints)) {
+      v$input$howLongComplaints <- params$complaints
+    }
+    if (!is.null(params$height)) {
+      v$input$height <- params$height
+    }
+    if (!is.null(params$nrspainload)) {
+      v$input$nrspainload_score <- params$nrspainload
+    }
+    if (!is.null(params$nrsfunction)) {
+      v$input$nrsfunction_score <- params$nrsfunction
+    }
+    if (!is.null(params$ipqconcern)) {
+      v$input$ipqconcern_SQ001 <- params$ipqconcern
+    }
+    if (!is.null(params$ipqemotionalresponse)) {
+      v$input$ipqemotionalresponse_SQ001 <- params$ipqemotionalresponse
+    }
+    if (!is.null(params$primarygoal)) {
+      v$input$PrimaryGoal.x <- recode_primary_goal(params$primarygoal)
+    }
+    if (!is.null(params$primpsnint)) {
+      v$input$PrimPSN_Int <- params$primpsnint
+    }
+    if (!is.null(params$primpsnsatisf)) {
+      v$input$PrimPSN_Satisf <- params$primpsnsatisf
+    }
   })
 
-  # Initialiseer inputs with current values ----
+  # Initialize inputs with current values ----
   observe({
 
-    updateSelectizeInput(session = session,
-                         inputId = "diagnose_in",
-                         choices = setNames(c("Carpal Tunnel Syndrome", "CMC-1 OA"
-                                              ,"Dupuytren fingers", "M. de Quervain"
-                                              ,"TFCC", "Trigger"),
-                                            c(i18n()$t("Carpaal Tunnel Syndroom"),i18n()$t("CMC-1 artrose")
-                                              ,i18n()$t("M. Dupuytren"), i18n()$t("M. De Quervain")
-                                              ,i18n()$t("TFCC letsel"),i18n()$t("Trigger finger"))),
-                         selected = isolate(v$input$Diagnose)
+    updateSelectizeInput(
+      session = session,
+      inputId = "diagnose_in",
+      choices = setNames(
+        c(
+          "Carpal Tunnel Syndrome", "CMC-1 OA", "Dupuytren fingers",
+          "M. de Quervain", "TFCC", "Trigger"
+        ),
+        c(
+          i18n()$t("Carpaal Tunnel Syndroom"), i18n()$t("CMC-1 artrose"),
+          i18n()$t("M. Dupuytren"), i18n()$t("M. De Quervain"),
+          i18n()$t("TFCC letsel"), i18n()$t("Trigger finger")
+        )
+      ),
+      selected = isolate(v$input$Diagnose)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "track_in",
-                         choices = setNames(c("Duim", "Vinger", "Pols", "Zenuw"),
-                                            c(i18n()$t("Duim"),i18n()$t("Vinger"),i18n()$t("Pols")
-                                              ,i18n()$t("Zenuw"))),
-                         selected = isolate(v$input$Track)
+    updateSelectizeInput(
+      session = session,
+      inputId = "track_in",
+      choices = setNames(
+        c("Duim", "Vinger", "Pols", "Zenuw"),
+        c(
+          i18n()$t("Duim"), i18n()$t("Vinger"), i18n()$t("Pols"),
+          i18n()$t("Zenuw")
+        )
+      ),
+      selected = isolate(v$input$Track)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "track_type_in",
-                         choices = unique(dt_diagnosis_track$`Track Type`),
-                         selected = isolate(v$input$Track_type)
+    updateSelectizeInput(
+      session = session,
+      inputId = "track_type_in",
+      choices = unique(dt_diagnosis_track$`Track Type`),
+      selected = isolate(v$input$Track_type)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "age_in",
-                         choices = c(seq(16, 120, by = 1)),
-                         selected = isolate(v$input$Age)
+    updateSelectizeInput(
+      session = session,
+      inputId = "age_in",
+      choices = setNames(
+        c("", seq(16, 120)),
+        c(i18n()$t("Maak een keuze"), seq(16, 120))
+      ),
+      selected = isolate(v$input$Age)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "weight_in",
-                         choices = c(seq(30, 200, by = 1)),
-                         selected = isolate(v$input$weight)
+    updateSelectizeInput(
+      session = session,
+      inputId = "weight_in",
+      choices = setNames(
+        c("", seq(30, 200)),
+        c(i18n()$t("Maak een keuze"), seq(30, 200))
+      ),
+      selected = isolate(v$input$weight)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "duration_in",
-                         choices = c(seq(0, 1080, by = 1)),
-                         selected = isolate(v$input$howLongComplaints)
+    updateSelectizeInput(
+      session = session,
+      inputId = "duration_in",
+      choices = setNames(
+        c("", seq(0, 1080)),
+        c(i18n()$t("Maak een keuze"), seq(0, 1080))
+      ),
+      selected = isolate(v$input$howLongComplaints)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "height_in",
-                         choices = c(seq(100, 230, by = 1)),
-                         selected = isolate(v$input$height)
+    updateSelectizeInput(
+      session = session,
+      inputId = "height_in",
+      choices = setNames(
+        c("", seq(100, 230)),
+        c(i18n()$t("Maak een keuze"), seq(100, 230))
+      ),
+      selected = isolate(v$input$height)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "ipqconcern_SQ001_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$ipqconcern_SQ001)
+    updateSelectizeInput(
+      session = session,
+      inputId = "ipqconcern_SQ001_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$ipqconcern_SQ001)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "nrspainload_score_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$nrspainload_score)
+    updateSelectizeInput(
+      session = session,
+      inputId = "nrspainload_score_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$nrspainload_score)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "nrsfunction_score_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$nrsfunction_score)
+    updateSelectizeInput(
+      session = session,
+      inputId = "nrsfunction_score_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$nrsfunction_score)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "ipqemotionalresponse_SQ001_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$ipqemotionalresponse_SQ001)
+    updateSelectizeInput(
+      session = session,
+      inputId = "ipqemotionalresponse_SQ001_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$ipqemotionalresponse_SQ001)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "primPSN_int_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$PrimPSN_Int)
+    updateSelectizeInput(
+      session = session,
+      inputId = "primPSN_int_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$PrimPSN_Int)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "primPSN_satisf_in",
-                         choices = c(seq(0, 10, by = 1)),
-                         selected = isolate(v$input$PrimPSN_Satisf)
+    updateSelectizeInput(
+      session = session,
+      inputId = "primPSN_satisf_in",
+      choices = setNames(
+        c("", seq(0, 10)),
+        c(i18n()$t("Maak een keuze"), seq(0, 10))
+      ),
+      selected = isolate(v$input$PrimPSN_Satisf)
     )
 
-    updateSelectizeInput(session = session,
-                         inputId = "domain_in",
-                         choices = setNames(c("pijn", "tintelingen", "doofheid",
-                                              "kracht", "activiteiten uitvoeren",
-                                              "soepelheid/beweeglijkheid", "uiterlijk",
-                                              "werk uitvoeren"),
-                                            c(i18n()$t("Pijn"),i18n()$t("Tintelingen"),i18n()$t("Doofheid")
-                                              ,i18n()$t("Kracht"), i18n()$t("Activiteiten uitvoeren")
-                                              ,i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk")
-                                              ,i18n()$t("Werk uitvoeren"))),
-                         selected = isolate(v$input$PrimaryGoal.x)
-                         )
-
-
+    updateSelectizeInput(
+      session = session,
+      inputId = "domain_in",
+      choices = setNames(
+        c(
+          "pijn", "tintelingen", "doofheid", "kracht", "activiteiten uitvoeren",
+          "soepelheid/beweeglijkheid", "uiterlijk", "werk uitvoeren"
+        ),
+        c(
+          i18n()$t("Pijn"), i18n()$t("Tintelingen"), i18n()$t("Doofheid"),
+          i18n()$t("Kracht"), i18n()$t("Activiteiten uitvoeren"),
+          i18n()$t("Soepelheid/beweeglijkheid"), i18n()$t("Uiterlijk"),
+          i18n()$t("Werk uitvoeren")
+        )
+      ),
+      selected = isolate(v$input$PrimaryGoal.x)
+    )
+    waiter_hide()
   })
 
   # Determine if checkbox for handtherapy should be checked or not
@@ -240,7 +316,7 @@ app_server <- function(input, output, session) {
 
     update_slider_layout(goal, current_val, goal_val)
 
-    waiter_hide()
+    # waiter_hide()
 
   }, ignoreInit = TRUE)
 
@@ -306,8 +382,8 @@ app_server <- function(input, output, session) {
 
   })
 
-  # Update input datatable wanneer input verandert ----
-  # Update dataframe with current and goal value inputs when slider values change
+  # Update input data when input changes ----
+  # Update data with current and goal value inputs when slider values change
   observeEvent(input$pmg_slider, {
     req(!input$domain_in == "")
     req((!negative_goal()))

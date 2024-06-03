@@ -61,7 +61,8 @@
     {"en": "How did you experience the function of your hand during the past week? (0 = no function, 10 = full function)", "nl": "Hoe heeft u in de afgelopen week de functie van uw hand ervaren? (0 = geen functie, 10 = volledige functie)"},
     {"en": "How much pain did you have in the past week during physical loading? (0 = no pain, 10 = worst possible pain)", "nl": "Hoeveel pijn heeft u de afgelopen week gehad tijdens belasten? (0 = geen pijn, 10 = hevigst denkbare pijn)"},
     {"en": "How concerned are you about your hand or wrist condition? (0 = Not at all concerned, 10 = Extremely concerned)", "nl": "In hoeverre bent u bezorgd over uw hand- of polsaandoening? (0 = Helemaal niet bezorgd, 10 = Uitermate bezorgd)"},
-    {"en": "How much does your illness affect you emotionally (e.g., does it make you angry, scared, upset or depressed)? (0 = Not at all affected emotionally, 10 = extremely affected emotionally)", "nl": "In hoeverre heeft uw hand- of polsaandoening invloed op uw gemoedstoestand? (bv. maakt het u boos, angstig, van streek of somber?) (0 = Helemaal geen invloed, 10 = Uitermate veel invloed"}
+    {"en": "How much does your illness affect you emotionally (e.g., does it make you angry, scared, upset or depressed)? (0 = Not at all affected emotionally, 10 = extremely affected emotionally)", "nl": "In hoeverre heeft uw hand- of polsaandoening invloed op uw gemoedstoestand? (bv. maakt het u boos, angstig, van streek of somber?) (0 = Helemaal geen invloed, 10 = Uitermate veel invloed"},
+    {"en": "Make a choice", "nl": "Maak een keuze"}
   ]
 }
 
