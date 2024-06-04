@@ -103,10 +103,26 @@ app_server <- function(input, output, session) {
       v$input$PrimPSN_Satisf <- params$primpsnsatisf
     }
 
+    # Determine sidebar status
+    if (!is.null(params$sidebar)) {
+      show_sidebar(params$sidebar == 1)
+    }
+
     # Show warning if any of the input values is empty
     if (!any(sapply(v$input, is.null))) {
       shinyjs::hide("warning_box")
-      sidebar_toggle("sidebar", open = FALSE)
+      if (!show_sidebar()) {
+        sidebar_toggle("sidebar", open = FALSE)
+      }
+    }
+  })
+
+  observeEvent(v$input, {
+    if (!any(sapply(v$input, is.null))) {
+      shinyjs::hide("warning_box")
+      if (!show_sidebar()) {
+        sidebar_toggle("sidebar", open = FALSE)
+      }
     }
   })
 
