@@ -381,9 +381,21 @@ app_server <- function(input, output, session) {
 
     current_val <- v$input$PrimPSN_Int
     if (selected_domain() %in% reverse_domains) {
-      v$input$PrimPSN_Satisf <- current_val + 1
+      # slider max is 10
+      if (current_val == 10) {
+        v$input$PrimPSN_Satisf = 10
+        v$input$PrimPSN_Int = 9
+      } else {
+        v$input$PrimPSN_Satisf = current_val + 1
+      }
     } else {
-      v$input$PrimPSN_Satisf <- current_val - 1
+      # slider min is 0
+      if (current_val == 0) {
+        v$input$PrimPSN_Satisf = 0
+        v$input$PrimPSN_Int = 1
+      } else {
+        v$input$PrimPSN_Satisf = current_val - 1
+      }
     }
     goal_val <- v$input$PrimPSN_Satisf
 
