@@ -398,6 +398,7 @@ app_server <- function(input, output, session) {
       }
     }
     goal_val <- v$input$PrimPSN_Satisf
+    current_val <- v$input$PrimPSN_Int
 
     range_vector <- if(current_val > goal_val) {c(goal_val, current_val)} else {c(current_val, goal_val)}
 
