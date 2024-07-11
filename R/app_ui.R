@@ -21,7 +21,7 @@ app_ui <- function(request) {
     waiterShowOnLoad(html = spin_three_bounce(), color = "#4876b3"),   # show loading screen while app is getting ready
     page_fluid(
       page_sidebar(
-        title = span(i18n$t("Gepersonaliseerd beslismodel behalen persoonlijke doelen (Personal Meaningful Gain)"), class = "dashboard-title"),
+        title = span(i18n$t("Gepersonaliseerd beslismodel voor het behalen van persoonlijke doelen (Personal Meaningful Gain)"), class = "dashboard-title"),
         sidebar = sidebar(
           id = "sidebar",
           width = 300,
@@ -42,21 +42,6 @@ app_ui <- function(request) {
                         value = TRUE
           ),
           hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
-          selectizeInput(inputId = "diagnose_in",
-                         label = i18n$t("Diagnose"),
-                         choices = NULL,
-                         selected = NULL
-          ),
-          selectizeInput(inputId = "track_in",
-                         label = i18n$t("Meettraject"),
-                         choices = NULL,
-                         selected = NULL
-          ),
-          selectizeInput(inputId = "track_type_in",
-                         label = i18n$t("Meettraject type"),
-                         choices = NULL,
-                         selected = NULL
-          ),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
                          choices = NULL,
@@ -121,7 +106,7 @@ app_ui <- function(request) {
             class = "info_box_div",
             icon("circle-info", class = "info-icon"),
             p(class = "info-text",
-              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden.")
+              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden. Voor sommige behandelingen geldt dat dit nog geen eindresultaat is.")
             )
           ),
           radioButtons(
@@ -154,17 +139,24 @@ app_ui <- function(request) {
             style = "background-color: rgb(233, 233, 233)",
             card_body(
               class = "slider-card align-items-center",
-              selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Kies een primair doel:"),
-                             choices = NULL
-                             ),
+              fluidRow(
+                selectizeInput(inputId = "diagnose_in",
+                               label = i18n$t("Kies een diagnose:"),
+                               choices = NULL,
+                               selected = NULL
+                ),
+                selectizeInput(inputId = "domain_in",
+                               label = i18n$t("Kies een primair doel:"),
+                               choices = NULL
+                )
+              ),
               layout_column_wrap(
                 width = NULL,
                 style = htmltools::css(grid_template_columns = "1fr 8fr 1fr", align.items = "center"),
                 div(
                   class = "smiley-left",
                   img(id = "happy-smiley-left", src = "www/happy-smiley.webp", height = 25, width = 25),
-                  img(id = "sad-smiley-left", src = "www/sad-smiley.png", height = 25, width = 25)
+                  img(id = "sad-smiley-left", src = "www/sad-smiley.png", height = 25, width = 25, class = "hide")
                 ),
                 sliderInput("pmg_slider",
                             "",
