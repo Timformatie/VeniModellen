@@ -95,9 +95,13 @@ app_server <- function(input, output, session) {
     }
     if (!is.null(params$primpsnint)) {
       v$input$PrimPSN_Int <- params$primpsnint
+    } else {
+      v$input$PrimPSN_Int <- max(input$pmg_slider)
     }
     if (!is.null(params$primpsnsatisf)) {
       v$input$PrimPSN_Satisf <- params$primpsnsatisf
+    } else {
+      v$input$PrimPSN_Satisf <- min(input$pmg_slider)
     }
 
     # Determine sidebar status
