@@ -50,7 +50,6 @@ app_server <- function(input, output, session) {
   )
 
   # Vul datatable met initiële waarden ----
-  # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
   observeEvent(session$clientData$url_search, {
     message("create datatable with initial values from URL")
 
@@ -267,7 +266,7 @@ app_server <- function(input, output, session) {
     waiter_hide()
   })
 
-  # Determine if checkbox for handtherapy should be checked or not
+  # If diagnosis is Dupuytren, hand therapy and injection plots should be hidden
   observeEvent(input$diagnose_in, {
     message("hide therapy and injection plots when patient has specific diagnosis")
 
