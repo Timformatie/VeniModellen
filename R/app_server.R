@@ -24,11 +24,6 @@ app_server <- function(input, output, session) {
     update_lang(session = session, language = input$language_in)
   })
 
-  observe({
-    disable("track_in")
-    disable("track_type_in")
-  })
-
   # Initialiseer reactiveVal's
   selected_domain <- reactiveVal()
   negative_goal <- reactiveVal(NULL)
@@ -150,26 +145,6 @@ app_server <- function(input, output, session) {
         )
       ),
       selected = isolate(v$input$Diagnose)
-    )
-
-    updateSelectizeInput(
-      session = session,
-      inputId = "track_in",
-      choices = setNames(
-        c("Duim", "Vinger", "Pols", "Zenuw"),
-        c(
-          i18n()$t("Duim"), i18n()$t("Vinger"), i18n()$t("Pols"),
-          i18n()$t("Zenuw")
-        )
-      ),
-      selected = isolate(v$input$Track)
-    )
-
-    updateSelectizeInput(
-      session = session,
-      inputId = "track_type_in",
-      choices = unique(dt_diagnosis_track$`Track Type`),
-      selected = isolate(v$input$Track_type)
     )
 
     updateSelectizeInput(
