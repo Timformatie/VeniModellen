@@ -109,13 +109,6 @@ app_server <- function(input, output, session) {
       show_sidebar(params$sidebar == 1)
     }
 
-    # Show warning if any of the input values is empty
-    if (!any(sapply(v$input, is.null))) {
-      shinyjs::hide("warning_box")
-      if (!show_sidebar()) {
-        sidebar_toggle("sidebar", open = FALSE)
-      }
-    }
   })
 
   observeEvent(v$input, {
@@ -505,7 +498,6 @@ app_server <- function(input, output, session) {
     )
 
     # Get input data
-
     dt_input <- as.data.table(v$input)
 
     # Transform goal from dutch to english
