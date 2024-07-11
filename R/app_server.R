@@ -279,8 +279,14 @@ app_server <- function(input, output, session) {
       updateCheckboxInput(inputId = "show_therapie",
                           value = FALSE
       )
+      updateCheckboxInput(inputId = "show_injectie",
+                          value = FALSE
+      )
     } else {
       updateCheckboxInput(inputId = "show_therapie",
+                          value = TRUE
+      )
+      updateCheckboxInput(inputId = "show_injectie",
                           value = TRUE
       )
     }
