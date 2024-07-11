@@ -19,6 +19,7 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$language_in, {
+    message("update language")
     # Update language
     update_lang(session = session, language = input$language_in)
   })
@@ -56,6 +57,8 @@ app_server <- function(input, output, session) {
   # Vul datatable met initiële waarden ----
   # TODO: dit wordt een observeEvent op de URL met waarden van de betreffende patient
   observeEvent(session$clientData$url_search, {
+    message("create datatable with initial values from URL")
+
     # Extract query parameters from url
     params <- parseQueryString(URLdecode(session$clientData$url_search))
     params <- lapply(params, as.numeric)
@@ -118,6 +121,8 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(v$input, {
+    message("check if input is missing and hide/show warning and toggle sidebar")
+
     if (!any(sapply(v$input, is.null))) {
       shinyjs::hide("warning_box")
       if (!show_sidebar()) {
@@ -128,6 +133,7 @@ app_server <- function(input, output, session) {
 
   # Initialize inputs with current values ----
   observe({
+    message("initialize inputs with current values")
 
     updateSelectizeInput(
       session = session,
@@ -288,6 +294,8 @@ app_server <- function(input, output, session) {
 
   # Determine if checkbox for handtherapy should be checked or not
   observeEvent(input$diagnose_in, {
+    message("hide therapy and injection plots when patient has specific diagnosis")
+
     req(input$diagnose_in)
     if (input$diagnose_in == "Dupuytren fingers") {
       updateCheckboxInput(inputId = "show_therapie",
@@ -304,6 +312,8 @@ app_server <- function(input, output, session) {
   observe({
     req(v$input$PrimPSN_Int)
     req(v$input$PrimPSN_Satisf)
+    message("get current and goal values for selected domain and update slider")
+
 
     current_val <- isolate(v$input$PrimPSN_Int)
     goal_val <- isolate(v$input$PrimPSN_Satisf)
@@ -320,6 +330,7 @@ app_server <- function(input, output, session) {
     req(!input$domain_in == "")
     req(v$input$PrimPSN_Int)
     req(v$input$PrimPSN_Satisf)
+    message("Update slider layout when domain input changes")
 
     # Update selected domain reactiveVal
     selected_domain(input$domain_in)
@@ -341,6 +352,8 @@ app_server <- function(input, output, session) {
 
   # Determine if button for resetting goal values should be shown
   observeEvent(negative_goal(), {
+    message("Determine if button for resetting goal values should be shown")
+
     if (negative_goal()) {
       shinyjs::show(id = "reset_negative_goal_btn")
     } else {
@@ -352,6 +365,8 @@ app_server <- function(input, output, session) {
   # Change text ----
   # Change text according to domain and slider values
   output$MPG_text <- renderText({
+    message("Change text according to domain and slider values")
+
     req(!selected_domain() == "")
     req(v$input$PrimPSN_Int)
     req(v$input$PrimPSN_Satisf)
@@ -380,6 +395,8 @@ app_server <- function(input, output, session) {
 
   # Reset goal values
   observeEvent(input$reset_negative_goal_btn, {
+    message("Negative goal reset")
+
     req(v$input$PrimPSN_Int)
     req(v$input$PrimPSN_Satisf)
     negative_goal(FALSE)
@@ -404,6 +421,8 @@ app_server <- function(input, output, session) {
   # Update input data when input changes ----
   # Update data with current and goal value inputs when slider values change
   observeEvent(input$pmg_slider, {
+
+    message("slider change - update current and goal values")
     req(!input$domain_in == "")
     req((!negative_goal()))
 
@@ -482,6 +501,8 @@ app_server <- function(input, output, session) {
 
   # Calculate PMG
   PMG_val <- reactive({
+    message("calculate PMG value")
+
     req(v$input$PrimPSN_Int)
     req(v$input$PrimPSN_Satisf)
     PMG <- abs(as.numeric(v$input$PrimPSN_Satisf) - as.numeric(v$input$PrimPSN_Int))
