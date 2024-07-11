@@ -287,10 +287,10 @@ app_server <- function(input, output, session) {
 
   # Get current and goal values for selected domain and update slider
   observe({
-    req(v$input$PrimPSN_Int)
-    req(v$input$PrimPSN_Satisf)
     message("get current and goal values for selected domain and update slider")
 
+    req(isolate(v$input$PrimPSN_Int))
+    req(isolate(v$input$PrimPSN_Satisf))
 
     current_val <- isolate(v$input$PrimPSN_Int)
     goal_val <- isolate(v$input$PrimPSN_Satisf)
@@ -304,14 +304,15 @@ app_server <- function(input, output, session) {
   # Update slider layout ----
   # Update slider layout when domain input changes
   observeEvent(input$domain_in, {
-    req(!input$domain_in == "")
-    req(v$input$PrimPSN_Int)
-    req(v$input$PrimPSN_Satisf)
     message("Update slider layout when domain input changes")
 
+    req(!input$domain_in == "")
     # Update selected domain reactiveVal
     selected_domain(input$domain_in)
     v$input$PrimaryGoal.x <- selected_domain()
+
+    req(v$input$PrimPSN_Int)
+    req(v$input$PrimPSN_Satisf)
 
     current_val <- v$input$PrimPSN_Int
     goal_val <- v$input$PrimPSN_Satisf
@@ -401,6 +402,7 @@ app_server <- function(input, output, session) {
 
     message("slider change - update current and goal values")
     req(!input$domain_in == "")
+    req((!is.null(negative_goal())))
     req((!negative_goal()))
 
     if (selected_domain() %in% reverse_domains) {
