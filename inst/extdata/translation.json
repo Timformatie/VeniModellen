@@ -2,9 +2,10 @@
   "cultural_date_format": "%d-%m-%Y",
   "languages": ["nl", "en"],
   "translation": [
-    {"en": "Personalized decision model personal goals (Personal Meaningful Gain)", "nl": "Gepersonaliseerd beslismodel behalen persoonlijke doelen (Personal Meaningful Gain)"},
+    {"en": "Personalized decision model for achieving personal goals (Personal Meaningful Gain)", "nl": "Gepersonaliseerd beslismodel voor het behalen van persoonlijke doelen (Personal Meaningful Gain)"},
     {"en": "Show results for:", "nl": "Toon uitkomsten voor:"},
-    {"en": "The model is based on 5010 patients. All predictions are for outcomes after 3 months.", "nl": "Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden."},
+    {"en": "The model is based on 5010 patients. All visualized predictions concern outcomes at three months post-treatment. For some treatments, this is not the final result.", "nl": "Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden. Voor sommige behandelingen geldt dat dit nog geen eindresultaat is."},
+    {"en": "Hand therapy", "nl": "Handtherapie"},
     {"en": "Injection", "nl": "Injectie"},
     {"en": "+ Injection", "nl": "+ Injectie"},
     {"en": "Show surgery predictions", "nl": "Toon resultaten voor operatie"},
