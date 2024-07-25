@@ -11,6 +11,8 @@
 #' @noRd
 update_slider_layout <- function(domain, current_val, goal_val) {
 
+  message("function - update slider layout")
+
   if (domain %in% reverse_domains) { # Example: domain "kracht" --> higher score is better
     removeClass(selector = ".irs--shiny .irs-min", class = "groen")
     removeClass(selector = ".irs--shiny .irs-max", class = "rood")

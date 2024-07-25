@@ -11,7 +11,7 @@ Imports:
     shinyfullscreen (>= 1.1.0),
     shinyjs (>= 2.1.0),
     stringr (>= 1.5.1),
-    bslib (>= 0.6.1),
+    bslib (>= 0.7.0),
     networkD3 (>= 0.4),
     dplyr (>= 1.1.4),
     gbm (>= 2.1.9),

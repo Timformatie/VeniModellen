@@ -21,15 +21,16 @@ app_ui <- function(request) {
     waiterShowOnLoad(html = spin_three_bounce(), color = "#4876b3"),   # show loading screen while app is getting ready
     page_fluid(
       page_sidebar(
-        title = "Veni Modellen",
+        title = span(i18n$t("Gepersonaliseerd beslismodel voor het behalen van persoonlijke doelen (Personal Meaningful Gain)"), class = "dashboard-title"),
         sidebar = sidebar(
+          id = "sidebar",
           width = 300,
           title = "Model input",
-          p(i18n$t("Op dit moment worden de gegevens getoond voor patientnummer xxx")),
-          hr(style = "color: grey"),
+          open = TRUE,
+          # hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           p(i18n$t("Toon uitkomsten voor:")),
           checkboxInput(inputId = "show_therapie",
-                        label = i18n$t("Therapie"),
+                        label = i18n$t("Handtherapie"),
                         value = TRUE
           ),
           checkboxInput(inputId = "show_injectie",
@@ -40,22 +41,7 @@ app_ui <- function(request) {
                         label = i18n$t("Operatie"),
                         value = TRUE
           ),
-          hr(style = "color: grey"),
-          selectizeInput(inputId = "diagnose_in",
-                         label = i18n$t("Diagnose"),
-                         choices = NULL,
-                         selected = NULL
-          ),
-          selectizeInput(inputId = "track_in",
-                         label = i18n$t("Meettraject"),
-                         choices = NULL,
-                         selected = NULL
-          ),
-          selectizeInput(inputId = "track_type_in",
-                         label = i18n$t("Meettraject type"),
-                         choices = NULL,
-                         selected = NULL
-          ),
+          hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           selectizeInput(inputId = "age_in",
                          label = i18n$t("Leeftijd"),
                          choices = NULL,
@@ -115,7 +101,14 @@ app_ui <- function(request) {
           hr(style = "color: grey")
         ),
         div(
-          style = "display: flex; justify-content:flex-end;",
+          style = "display: flex; justify-content:space-between;",
+          div(
+            class = "info_box_div",
+            icon("circle-info", class = "info-icon"),
+            p(class = "info-text",
+              i18n$t("Het model is gebaseerd op 5010 patienten. Alle getoonde predicties zijn voor uitkomsten op 3 maanden. Voor sommige behandelingen geldt dat dit nog geen eindresultaat is.")
+            )
+          ),
           radioButtons(
             inputId = "language_in",
             label = "",
@@ -128,23 +121,42 @@ app_ui <- function(request) {
             inline = TRUE
           )
         ),
+        div(
+          id = "warning_box",
+          style = "display: flex; justify-content:space-between;",
+          div(
+            class = "warning_box_div",
+            icon("circle-exclamation", class = "info-icon"),
+            p(
+              class = "info-text",
+              i18n$t("De predicties kunnen pas getoond worden als alle variabelen zijn ingevuld.")
+            )
+          )
+        ),
         layout_column_wrap(
           width = 1,
           card(
             style = "background-color: rgb(233, 233, 233)",
             card_body(
               class = "slider-card align-items-center",
-              selectizeInput(inputId = "domain_in",
-                             label = i18n$t("Primaire doel:"),
-                             choices = NULL
-                             ),
+              fluidRow(
+                selectizeInput(inputId = "diagnose_in",
+                               label = i18n$t("Kies een diagnose:"),
+                               choices = NULL,
+                               selected = NULL
+                ),
+                selectizeInput(inputId = "domain_in",
+                               label = i18n$t("Kies een primair doel:"),
+                               choices = NULL
+                )
+              ),
               layout_column_wrap(
                 width = NULL,
                 style = htmltools::css(grid_template_columns = "1fr 8fr 1fr", align.items = "center"),
                 div(
                   class = "smiley-left",
                   img(id = "happy-smiley-left", src = "www/happy-smiley.webp", height = 25, width = 25),
-                  img(id = "sad-smiley-left", src = "www/sad-smiley.png", height = 25, width = 25)
+                  img(id = "sad-smiley-left", src = "www/sad-smiley.png", height = 25, width = 25, class = "hide")
                 ),
                 sliderInput("pmg_slider",
                             "",
@@ -171,25 +183,37 @@ app_ui <- function(request) {
         ),
         card(
           class = "sankey_therapie",
-          card_header(i18n$t("Sankey therapie (en injectie)")),
+          card_header(i18n$t("Handtherapie (optioneel met injectie)")),
           card_body(
-            checkboxInput(inputId = "injection_in",
-                          label = i18n$t("Injectie"),
-                          value = FALSE
+            fluidRow(
+              column(
+                width = 1,
+                checkboxInput(inputId = "injection_in",
+                              label = i18n$t("+ Injectie"),
+                              value = FALSE
+                )
+              ),
+              column(
+                width = 3,
+                checkboxInput(inputId = "show_operation_results_in",
+                              label = i18n$t("Toon resultaten voor operatie"),
+                              value = TRUE
+                )
+              )
             ),
             fullscreen_this(highchartOutput("sankey_therapie"))
           )
         ),
         card(
           class = "sankey_injectie",
-          card_header("Sankey injectie"),
+          card_header(i18n$t("Injectie")),
           card_body(
             fullscreen_this(highchartOutput("sankey_injectie"))
           )
         ),
         card(
           class = "sankey_operatie",
-          card_header("Sankey operatie"),
+          card_header(i18n$t("Operatie ")),
           card_body(
             fullscreen_this(highchartOutput("sankey_operatie", width = "59%"))
           )
@@ -217,7 +241,7 @@ golem_add_external_resources <- function() {
     favicon(ext = 'png'),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "Veni modellen"
+      app_title = "Personalized decision model personal goals (Personal Meaningful Gain)"
     ),
     tags$head(
       tags$link(
