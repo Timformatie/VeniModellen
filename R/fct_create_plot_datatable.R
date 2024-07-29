@@ -47,7 +47,7 @@ create_plot_datatable <- function(dt_pred, language, treatment_type, PMG, show_o
   )
 
   # Modify dt_results when user only wants therapy results shown (without surgery results)
-  if (show_operation_results == FALSE) {
+  if (!show_operation_results) {
     dt_results = dt_results[1:2]
   }
 
