@@ -14,6 +14,7 @@ create_modal <- function(input_var, dt_input, i18n) {
   question_text <- dt_questions[Variable == input_var, `Informatie/mouse over NL`]
   input_id <- paste0(input_var, "_modal_in")
   label <- dt_questions[Variable == input_var, `NL label variabele naam`]
+  slider_value = ifelse(is.null(dt_input[[input_var]]), 5, dt_input[[input_var]])
 
   showModal(
     modalDialog(
@@ -26,7 +27,7 @@ create_modal <- function(input_var, dt_input, i18n) {
                     label = i18n()$t(label),
                     min = 0,
                     max = 10,
-                    value = dt_input[[input_var]]
+                    value = slider_value
         )
       ),
       size = "m",

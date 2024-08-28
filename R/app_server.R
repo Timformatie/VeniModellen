@@ -113,11 +113,12 @@ app_server <- function(input, output, session) {
 
   observeEvent(v$input, {
     message("check if input is missing and hide/show warning and toggle sidebar")
-
     if (!any(sapply(v$input, is.null))) {
       shinyjs::hide("warning_box")
-      if (!show_sidebar()) {
-        sidebar_toggle("sidebar", open = FALSE)
+      if (show_sidebar()) {
+        toggle_sidebar("sidebar", open = TRUE)
+      } else {
+        toggle_sidebar("sidebar", open = FALSE)
       }
     }
   })
