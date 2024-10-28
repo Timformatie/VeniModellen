@@ -27,7 +27,6 @@ app_ui <- function(request) {
           width = 300,
           title = "Model input",
           open = TRUE,
-          # hr(style = "color: grey; margin: 5px 0px 5px 0px;"),
           p(i18n$t("Toon uitkomsten voor:")),
           checkboxInput(inputId = "show_therapie",
                         label = i18n$t("Handtherapie"),

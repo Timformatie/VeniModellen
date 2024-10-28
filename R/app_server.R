@@ -57,6 +57,8 @@ app_server <- function(input, output, session) {
     params <- parseQueryString(URLdecode(session$clientData$url_search))
     params <- lapply(params, as.numeric)
 
+    # Initiate default values for diagnosis, track and track type.
+    # Track and track type depend on diagnosis.
     v$input$Diagnose <- "Trigger"
     v$input$Track <- dt_diagnosis_track[
       Diagnose_dt_train == v$input$Diagnose, Track
@@ -111,13 +113,18 @@ app_server <- function(input, output, session) {
 
   })
 
+  # Sidebar is always shown when one or more inputs are missing.
+  # If no input is missing, hide warning text
+  # and toggle sidebar according to status.
   observeEvent(v$input, {
     message("check if input is missing and hide/show warning and toggle sidebar")
-
     if (!any(sapply(v$input, is.null))) {
       shinyjs::hide("warning_box")
-      if (!show_sidebar()) {
-        sidebar_toggle("sidebar", open = FALSE)
+
+      if (show_sidebar()) {
+        toggle_sidebar("sidebar", open = TRUE)
+      } else {
+        toggle_sidebar("sidebar", open = FALSE)
       }
     }
   })
