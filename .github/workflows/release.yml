@@ -84,7 +84,6 @@ jobs:
 
       - name: Substitute environment variables in YAML
         run: |
-          sleep 60 |
           cat inst/service.yml |
           sed 's/GCP_PROJECT_PLACEHOLDER/${{ env.GCP_PROJECT }}/g' |
           sed 's/REGION_PLACEHOLDER/${{ env.REGION }}/g' |
