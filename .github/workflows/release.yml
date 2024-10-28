@@ -2,10 +2,19 @@ name:
 
 on:
   workflow_dispatch:
+    branches:
+      - dev*
+  pull_request:
+    types: [closed]
+    branches:
+      - test
   release:
     types: [published]
+    branches:
+      - main
 
 env:
+  ENVIRONMENT: ${{ github.event.release.target_commitish == 'main' && ' ' || '-test' }}
   GCP_PROJECT: venimodellen
   REGION: europe-west4
   REGISTRY: europe-west4-docker.pkg.dev
@@ -48,7 +57,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}${{ env.ENVIRONMENT }}
 
       - name: Create and populate .Renviron file
         env:
@@ -75,14 +84,19 @@ jobs:
 
       - name: Substitute environment variables in YAML
         run: |
+          sleep 60 |
           cat inst/service.yml |
           sed 's/GCP_PROJECT_PLACEHOLDER/${{ env.GCP_PROJECT }}/g' |
           sed 's/REGION_PLACEHOLDER/${{ env.REGION }}/g' |
           sed 's/REGISTRY_PLACEHOLDER/${{ env.REGISTRY }}/g' |
           sed 's/ARTIFACT_REPO_PLACEHOLDER/${{ env.ARTIFACT_REPO }}/g' |
-          sed 's/IMAGE_NAME_PLACEHOLDER/${{ env.IMAGE_NAME }}/g' |
+          sed 's/IMAGE_NAME_PLACEHOLDER/${{ env.IMAGE_NAME }}${{ env.ENVIRONMENT }}/g' |
           sed 's/CONTAINER_PORT_PLACEHOLDER/${{ env.CONTAINER_PORT }}/g' |
           sed 's/SERVICE_ACCOUNT_PLACEHOLDER/${{ env.SERVICE_ACCOUNT }}/g' > inst/service.yml
+
+      - name: Sleep before Cloud Run deployment
+        run: |
+          sleep 30
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v1
