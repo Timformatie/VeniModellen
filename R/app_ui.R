@@ -194,7 +194,7 @@ app_ui <- function(request) {
               ),
               column(
                 width = 3,
-                checkboxInput(inputId = "show_operation_results_in",
+                checkboxInput(inputId = "show_operation_results_therapy_in",
                               label = i18n$t("Toon resultaten voor operatie"),
                               value = TRUE
                 )
@@ -207,6 +207,10 @@ app_ui <- function(request) {
           class = "sankey_injectie",
           card_header(i18n$t("Injectie")),
           card_body(
+            checkboxInput(inputId = "show_operation_results_injection_in",
+                          label = i18n$t("Toon resultaten voor operatie"),
+                          value = TRUE
+            ),
             fullscreen_this(highchartOutput("sankey_injectie"))
           )
         ),
