@@ -556,7 +556,7 @@ app_server <- function(input, output, session) {
   ## data for plot ----
   dt_results_therapie_operatie <- reactive({
     dt_pred <- dt_pred_therapie_operatie()
-    show_operation_results <- input$show_operation_results_in
+    show_operation_results <- input$show_operation_results_therapy_in
 
     dt_sankey_therapie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in,
                                                 treatment_type = "therapie",
@@ -608,9 +608,13 @@ app_server <- function(input, output, session) {
   ## data for plot ----
   dt_results_injectie <- reactive({
     dt_pred <- dt_pred_injectie()
+
+    show_operation_results <- input$show_operation_results_injection_in
+
     dt_sankey_injectie <- create_plot_datatable(dt_pred = dt_pred, language = input$language_in,
                                                 treatment_type = "injectie",
-                                                PMG = PMG_val())
+                                                PMG = PMG_val(),
+                                                show_operation_results = show_operation_results)
     return(dt_sankey_injectie)
   })
 
