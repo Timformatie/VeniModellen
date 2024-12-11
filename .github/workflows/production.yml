@@ -1,0 +1,24 @@
+name: Production release
+on:
+  release:
+    types: [published]
+    branches:
+      - main
+
+jobs:
+  publish-shiny-app:
+    permissions:
+      contents: read
+      id-token: write
+    uses: Timformatie/workflow-templates/.github/workflows/shiny.yml@main
+    secrets: inherit
+    with:
+      app_name: 'veni-modellen-applicatie'
+      environment: 'production'
+      gcp_project: 'venimodellen'
+      gcp_project_id: 1031676417138
+      artifact_repo: 'veni-modellen'
+      service_account: 'veni-modellen@venimodellen.iam.gserviceaccount.com'
+      use_env_suffix: false
+      min_instances: 1
+      use_cpu_throttling: false
