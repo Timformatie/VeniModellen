@@ -21,4 +21,4 @@ jobs:
       service_account: 'veni-modellen@venimodellen.iam.gserviceaccount.com'
       use_env_suffix: false
       min_instances: 1
-      cloud_run_arguments: '--no-cpu-throttling'
+      use_cpu_throttling: false
