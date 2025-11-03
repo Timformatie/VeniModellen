@@ -206,18 +206,13 @@ The application include a pre-trained machine learning model and other internal 
 
 ### Adding new users
 The "r-artsendashboard" dashboard contains a tab that displays the iframe with the "VeniModellen" application. This tab is shown only to a list of selected healthcare professionals. To add a new user to this list:
-1. The current list of users can be found in Google Cloud secret manager. Add the new user's details there.
+1. The current list of users can be found in (Google Cloud secret manager)[https://console.cloud.google.com/security/secret-manager/secret/r_artsendashboard_env_vars/versions?project=equipe-337111]. Add the new user's details there.
 2. Update the list of users in the Github secret of (the "r-artsendashboard" repository)[https://github.com/equipezorgbedrijven/r-artsendashboard].
 3. When releasing a new version of the "r-artsendashboard" dashboard, the updated list of users is pulled from the Github secret during the deployment process. See `release.yml`: "Create and populate env_vars file".
 
 ## License
 
 This project is developed by Timformatie. Please contact the authors for licensing information.
-
-## Authors
-
-- **Carlijn Konings** - *Lead Developer* - [carlijn@timformatie.nl](mailto:carlijn@timformatie.nl)
-- **Tim Eeftink** - *Developer* - [tim.eeftink@timformatie.nl](mailto:tim.eeftink@timformatie.nl)
 
 ## Support
 
