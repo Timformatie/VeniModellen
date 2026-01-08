@@ -116,7 +116,7 @@ app_ui <- function(request) {
               tagList(img(src = "www/flag_en.png", height = 15, width = 20))
             ),
             choiceValues = c("nl", "en"),
-            selected = "nl",
+            selected = "en",
             inline = TRUE
           )
         ),
