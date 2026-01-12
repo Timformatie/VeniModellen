@@ -77,5 +77,5 @@ jobs:
           --region=${{ env.REGION }} \
           --service-account=${{ secrets.SERVICE_ACCOUNT }} \
           --cpu=1 \
-          --memory=512Mi \
+          --memory=1Gi \
           --min-instances=0
