@@ -29,7 +29,7 @@ jobs:
         id: auth
         with:
           token_format: access_token
-          workload_identity_provider: projects/${{ env.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-workload-pool/providers/github
+          workload_identity_provider: projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-workload-pool/providers/github
           service_account: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Login to container registry
