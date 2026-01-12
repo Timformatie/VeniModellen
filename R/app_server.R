@@ -28,6 +28,7 @@ app_server <- function(input, output, session) {
   selected_domain <- reactiveVal()
   negative_goal <- reactiveVal(NULL)
   show_sidebar <- reactiveVal(TRUE)
+  update_language <- reactiveVal("en")
 
   # Initialiseer datatable with input values ----
   v <- reactiveValues(
@@ -55,6 +56,14 @@ app_server <- function(input, output, session) {
 
     # Extract query parameters from url
     params <- parseQueryString(URLdecode(session$clientData$url_search))
+
+    # Extract language and initiate update
+    language <- params$language
+    if (isTRUE(language != update_language())) {
+      update_language(language)
+    }
+
+    # Convert remaining parameters to numeric
     params <- lapply(params, as.numeric)
 
     # Initiate default values for diagnosis, track and track type.
@@ -111,6 +120,20 @@ app_server <- function(input, output, session) {
       show_sidebar(params$sidebar == 1)
     }
 
+  })
+
+  # Update selected language if an url parameter is found
+  observeEvent(update_language(), {
+    req(!is.null(update_language()))
+    message("update selected language from URL parameter")
+
+    if (update_language() %in% c("en", "nl")) {
+      updateSelectizeInput(
+        session = session,
+        inputId = "language_in",
+        selected = update_language()
+      )
+    }
   })
 
   # Sidebar is always shown when one or more inputs are missing.
@@ -305,7 +328,7 @@ app_server <- function(input, output, session) {
     updateSliderInput(session = session,
                       inputId = "pmg_slider",
                       value = range_vector
-                      )
+    )
   })
 
   # Update slider layout ----
@@ -453,7 +476,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$duration_in, {
     req(input$duration_in)
     v$input[["howLongComplaints"]] <- as.numeric(input$duration_in)
-      })
+  })
 
   observeEvent(input$diagnose_in, {
     req(!input$diagnose_in == "")
@@ -562,7 +585,7 @@ app_server <- function(input, output, session) {
                                                 treatment_type = "therapie",
                                                 PMG = PMG_val(),
                                                 show_operation_results = show_operation_results
-                                                )
+    )
     return(dt_sankey_therapie)
   })
 
@@ -710,7 +733,7 @@ app_server <- function(input, output, session) {
   onclick("edit_icon_nrspainload_score", {
     create_modal(input_var = "nrspainload_score", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("nrspainload_score")
-    })
+  })
   onclick("edit_icon_nrsfunction_score", {
     create_modal(input_var = "nrsfunction_score", dt_input = v$input, i18n = reactive(i18n()))
     edit_question("nrsfunction_score")

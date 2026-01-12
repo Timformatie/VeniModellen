@@ -1,4 +1,4 @@
-FROM rocker/shiny-verse:4.3.1
+FROM rocker/shiny-verse:4.5.1
 
 # set environment variables
 ENV SHINY_LOG_STDERR=1
@@ -17,11 +17,11 @@ RUN apt-get update -y && apt-get install -y \
 WORKDIR /srv/shiny-server/
 
 # install r packages
-ENV RENV_VERSION 0.17.0
+ENV RENV_VERSION=1.1.5
 ENV RENV_CONFIG_REPOS_OVERRIDE=https://packagemanager.rstudio.com/cran/latest
 RUN R -e "install.packages('remotes', repos = c(RSPM = 'https://packagemanager.rstudio.com/cran/latest'))"
 RUN R -e "install.packages('attachment', repos = c(RSPM = 'https://packagemanager.rstudio.com/cran/latest'))"
-RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e "remotes::install_github('rstudio/renv@v${RENV_VERSION}')"
 
 COPY renv.lock renv.lock
 RUN R -e "renv::restore()"
